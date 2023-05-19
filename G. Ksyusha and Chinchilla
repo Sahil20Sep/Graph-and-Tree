@@ -1,0 +1,120 @@
+https://codeforces.com/contest/1833/problem/G
+
+
+#include<bits/stdc++.h>
+using namespace std;
+ 
+#define ll long long
+#define c(ans) cout << ans << endl
+#define cs(ans) cout << ans << " "
+#define fori(i, j, k) for(ll i = j; i < k; i++)
+#define ifor(i, j, k) for(ll i = j; i >= k; i--)
+#define inarr(j, n, a) for(ll i = j; i < n; i++) cin >> a[i];
+#define cy cout << "YES" << endl
+#define cn cout << "NO" << endl
+#define all(v) v.begin(), v.end()
+#define sz(v) v.size()
+#define pb push_back
+#define ff first
+#define ss second
+#define ce cout << endl
+ 
+typedef vector<ll> vll;
+ 
+const ll inf = 1e6 + 1;
+const ll mod = 1e9 + 7;
+const ll N = 2048;
+ 
+//----------------------------------Function----------------------------------//
+ 
+void cv(vector<ll> v){
+    fori(i, 0, sz(v)){
+        cs(v[i]);
+    }
+    cout << endl;
+}
+ 
+void cp(vector<pair<ll, ll>> p){
+    for(auto i : p){
+        cout << i.ff << " " << i.ss << endl;
+    }
+}
+ 
+struct my{
+    bool flag;
+};
+ 
+ll b_power(ll a, ll b)
+{
+    a %= mod;
+    ll res = 1 % mod;
+    while (b > 0) {
+        if (b & 1)
+            res = (res * a) % mod;
+        a = (a * a) % mod;
+        b >>= 1;
+    }
+    return res;
+}
+
+//------------------------------------code------------------------------------//
+ 
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0); 
+    ll T;
+    cin >> T;
+    while(T--){
+        ll n; cin >> n;
+        map<pair<ll, ll>, ll> hash;
+        vector<vector<ll>> graph(n + 1);
+        fori(i, 0, n - 1){
+            ll u, v; cin >> u >> v;
+            graph[u].pb(v);
+            graph[v].pb(u);
+            hash[{u, v}] = i + 1;
+            hash[{v, u}] = i + 1;
+        }
+        if(n % 3){
+            cout << -1 << endl;
+            continue;
+        }
+        vector<bool> visited(n + 1);
+        vector<ll> parent(n + 1);
+        vector<ll> sum(n + 1);
+        function<void(ll, ll)> dfs = [&] (ll vertex, ll par){
+            visited[vertex] = true;
+            parent[vertex] = par;
+            sum[vertex] = 1;
+            for(auto child : graph[vertex]){
+                if(visited[child]){
+                    continue;
+                }
+                visited[child] = true;
+                dfs(child, vertex);
+                sum[vertex] += sum[child];
+            }
+        };
+        dfs(1, -1);
+        // cv(sum); cv(parent);
+        ll cut = 0;
+        fori(i, 2, n + 1){
+            if(sum[i] % 3 == 0){
+                cut++;
+            }
+        }
+        if(cut == (n / 3) - 1){
+            cout << cut << endl;
+            fori(i, 2, n + 1){
+                if(sum[i] % 3 == 0){
+                    cout << hash[{i, parent[i]}] << ' ';
+                }
+            }
+            cout << endl;
+        }else{
+            cout << -1 << endl;
+        }
+        sahil:; 
+    }
+    return 0;
+}
