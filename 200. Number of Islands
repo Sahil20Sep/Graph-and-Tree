@@ -1,0 +1,82 @@
+class Solution {
+public:
+
+    vector<pair<int, int>> movement = {
+        {0, -1}, {-1, 0}, {1, 0}, {0, 1}
+    };
+
+    void dfs(int i, int j, vector<vector<char>> &v, vector<vector<bool>> &visited){
+        int n = v.size(), m = v[0].size();
+        if(i < 0 || j < 0 || i >= n || j >= m){
+            return;
+        }
+        if(v[i][j] != '1'){
+            return;
+        }
+        if(visited[i][j]){
+            return;
+        }
+        visited[i][j] = true;
+        for(auto k : movement){
+            dfs(i + k.first, j + k.second, v, visited);
+        }
+    }
+
+    int numIslands(vector<vector<char>>& v) {
+        int n = v.size(), m = v[0].size();
+        int cnt = 0;
+        vector<vector<bool>> visited(n, vector<bool> (m, false));
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(!visited[i][j] && v[i][j] == '1'){
+                    dfs(i, j, v, visited);
+                    cnt++;
+                }
+            }
+        }
+        return cnt;
+    }
+};
+
+----------------------------
+
+class Solution {
+public:
+
+    vector<pair<int, int>> movement = {
+        {0, -1}, {-1, 0}, {1, 0}, {0, 1}
+    };
+
+    int numIslands(vector<vector<char>>& v) {
+        int n = v.size(), m = v[0].size();
+        int cnt = 0;
+        vector<vector<bool>> visited(n, vector<bool> (m, false));
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(!visited[i][j] && v[i][j] == '1'){
+                    cnt++;
+                    queue<pair<int, int>> Q;
+                    Q.push({i, j});
+                    visited[i][j] = true;
+                    while(!Q.empty()){
+                        auto k = Q.front();
+                        Q.pop();
+                        int x = k.first, y = k.second;
+                        for(auto u : movement){
+                            int xx = u.first + x;
+                            int yy = u.second + y;
+                            if(xx >= 0 && xx < n && yy >= 0 && yy < m && v[xx][yy] == '1'){
+                                if(visited[xx][yy]){
+                                    continue;
+                                }
+                                Q.push({xx, yy});
+                                visited[xx][yy] = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return cnt;
+    }
+};
