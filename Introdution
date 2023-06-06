@@ -100,3 +100,50 @@ void bfs(int source){
 }
 
 O(v + e);
+
+----------------------------------------------------------------------------
+
+0-1 bfs
+if edges weight is 0 then add to front of the queue
+otherwise add back of the queue
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0); 
+    ll T = 1;
+    // cin >> T;
+    while(T--){
+        int n, m; cin >> n >> m;
+        vector<vector<pair<int, int>>> graph(n + 1);
+        fori(i, 0, m){
+            int u, v; cin >> u >> v;
+            graph[u].pb({v, 0});
+            graph[v].pb({u, 1});
+        }
+        vector<int> level(n + 1, INT_MAX);
+        deque<int> Q;
+        level[1] = 0;
+        Q.push_back(1);
+        while(!Q.empty()){
+            auto i = Q.front();
+            Q.pop_front();
+            for(auto child : graph[i]){
+                int a = child.first;
+                int b = child.second;
+                if(level[i] + b < level[a]){
+                    level[a] = level[i] + b;
+                    if(b){
+                        Q.push_back(a);
+                    }else{
+                        Q.push_front(a);
+                    }
+                }
+            }
+        }
+        level[n] == INT_MAX ? c(-1) : c(level[n]);
+        sahil:; 
+    }
+    return 0;
+}
+
+------------------------------------------------------------------------
