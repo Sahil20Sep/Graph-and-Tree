@@ -26,3 +26,20 @@ void dfs(ll vertex){
 O(N + E)
 
 cycle detection and connected component
+
+---------------------------------------------------------------------------------------------
+
+void dfs(ll vertex, ll par = -1){
+    // take action after enter into the vertex
+    for(auto child : graph[vertex]){
+        // take action before call the dfs for child
+        if(child == par){
+            continue;
+        }
+        depth[child] = depth[vertex] + 1;
+        dfs(child);
+        height[vertex] = max(height[vertex], height[child] + 1);
+        // take action after call the dfs for child
+    }
+    // take action after exit for the vertex
+}
