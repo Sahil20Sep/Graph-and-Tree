@@ -43,3 +43,22 @@ void dfs(ll vertex, ll par = -1){
     }
     // take action after exit for the vertex
 }
+
+-------------------------------------------------------------------------------------------
+
+void dfs(ll vertex, ll par = -1){
+    // take action after enter into the vertex
+    subtree_sum[vertex] += vertex;
+    even_cnt[vertex] = (vertex % 2);
+    for(auto child : graph[vertex]){
+        // take action before call the dfs for child
+        if(child == par){
+            continue;
+        }
+        dfs(child);
+        subtree_sum[vertex] += subtree_sum[child];
+        even_cnt[vertex] += even_cnt[child];
+        // take action after call the dfs for child
+    }
+    // take action after exit for the vertex
+}
