@@ -1,0 +1,28 @@
+graph[i][j] = 1 or wt (matrix but not usefull because of space complexity) O(n^2)
+
+graph[i].push_back(j); (list useful) O(v + e)
+
+wity weight 
+graph[i].push_back({j, wt});
+
+-----------------------------------------------------------------------------------------
+
+                            (DFS)
+
+void dfs(ll vertex){
+    // take action after enter into the vertex
+    visited[vertex] = true;
+    for(auto child : graph[vertex]){
+        if(visited[child]){
+            cotninue;
+        }
+        // take action before call the dfs for child
+        dfs(child);
+        // take action after call the dfs for child
+    }
+    // take action after exit for the vertex
+}
+
+O(N + E)
+
+cycle detection and connected component
