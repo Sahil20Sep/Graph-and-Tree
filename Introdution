@@ -62,3 +62,41 @@ void dfs(ll vertex, ll par = -1){
     }
     // take action after exit for the vertex
 }
+
+-------------------------------------------------------------------------------------
+
+To find diameter of tree is 
+first stemp --> take any node of tree and run dfs
+find max depth node;
+and second stemp --> take that node and run dfs and max value is diameter.
+
+------------------------------------------------------------------------------------
+
+            (LCA)
+
+run dfs and store parent of all node
+take one node and call function path return path
+
+compare min(both path) longest comman node is LCA.
+
+par[vertex] = p;
+
+-------------------------------------------------------------------------------
+
+void bfs(int source){
+    queue<int> Q;
+    Q.push(source);
+    while(!Q.empty()){
+        auto i = Q.front();
+        Q.pop();
+        for(auto child : graph[i]){
+            if(!visited[child]){
+                Q.push(child);
+                visited[child] = true;
+                level[child] = level[i] + 1;
+            }
+        }
+    }
+}
+
+O(v + e);
