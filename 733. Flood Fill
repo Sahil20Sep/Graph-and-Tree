@@ -1,0 +1,72 @@
+class Solution {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& v, int r, int c, int color) {
+        int n = v.size(), m = v[0].size();
+        set<pair<int, int>> ms;
+        vector<pair<int, int>> movement = {
+            {0, -1}, {-1, 0}, {1, 0}, {0, 1}
+        };
+        vector<vector<bool>> visited(n, vector<bool> (m, false));
+        queue<pair<int, int>> Q;
+        Q.push({r, c});
+        ms.insert({r, c});
+        while(!Q.empty()){
+            auto i = Q.front();
+            Q.pop();
+            int x = i.first, y = i.second;
+            visited[x][y] = true;
+            for(auto j : movement){
+                int xx = x + j.first;
+                int yy = y + j.second;
+                if(xx >= 0 && xx < n && yy >= 0 && yy < m && v[xx][yy] == v[r][c]){
+                    if(visited[xx][yy]){
+                        continue;
+                    }
+                    visited[xx][yy] = true;
+                    ms.insert({xx, yy});
+                    Q.push({xx, yy});
+                } 
+            }
+        }
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(ms.find({i, j}) != ms.end()){
+                    v[i][j] = color;
+                }
+            }
+        }
+        return v;
+    }
+};
+
+------------------------------------
+
+class Solution {
+public:
+
+    vector<pair<int, int>> movement = {
+        {0, -1}, {-1, 0}, {1, 0}, {0, 1}
+    };
+
+    void dfs(int i, int j, int old, int color, vector<vector<int>> &v){
+        int n = v.size(), m = v[0].size();
+        if(i < 0 || j < 0 || i >= n || j >= m){
+            return;
+        }
+        if(v[i][j] != old){
+            return;
+        }
+        v[i][j] = color;
+        for(auto k : movement){
+            dfs(i + k.first, j + k.second, old, color, v);
+        }
+    }
+
+    vector<vector<int>> floodFill(vector<vector<int>>& v, int r, int c, int color) {
+        int old = v[r][c];
+        if(old != color){
+            dfs(r, c, old, color, v);
+        }
+        return v;
+    }
+};
