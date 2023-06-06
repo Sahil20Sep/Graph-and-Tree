@@ -1,0 +1,46 @@
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0); 
+    ll T;
+    cin >> T;
+    while(T--){
+        string s, t; cin >> s >> t;
+        vector<pair<int, int>> movement = {
+            {1, 2}, {1, -2},
+            {-1, 2}, {-1, -2},
+            {2, 1}, {-2, 1},
+            {2, -1}, {-2, -1}
+        };
+        int r = s[0] - 'a';
+        int c = s[1] - '1';
+        vector<vector<bool>> visited(8, vector<bool> (8, false));
+        vector<vector<int>> level(8, vector<int> (8, 0));
+        level[r][c] = 0;
+        // cout << r << " " << c << endl;
+        queue<pair<int, int>> Q;
+        Q.push({r, c});
+        visited[r][c] = true;
+        while(!Q.empty()){
+            auto i = Q.front();
+            Q.pop();
+            int x = i.first, y = i.second;
+            for(auto k : movement){
+                int xx = x + k.first;
+                int yy = y + k.second;
+                if(xx >= 0 && xx <= 7 && yy >= 0 && yy <= 7){
+                    if(visited[xx][yy]){
+                        continue;
+                    }
+                    level[xx][yy] = level[x][y] + 1;
+                    visited[xx][yy] = true;
+                    Q.push({xx, yy});
+                }
+            }
+        }
+        r = t[0] - 'a', c = t[1] - '1';
+        // cout << r << " " << c << endl;
+        cout << level[r][c] << endl;
+        sahil:; 
+    }
+    return 0;
+}
