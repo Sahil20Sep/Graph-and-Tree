@@ -1,0 +1,37 @@
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0); 
+    ll T = 1;
+    // cin >> T;
+    while(T--){
+        ll n; cin >> n;
+        vector<vector<ll>> dp(n, vector<ll> (n));
+        fori(i, 0, n){
+            fori(j, 0, n){
+                cin >> dp[i][j];
+            }
+        }
+        vll v(n); inarr(0, n, v);
+        vll final;
+        reverse(all(v));
+        fori(via, 0, n){
+            int k = v[via] - 1;
+            fori(i, 0, n){
+                fori(j, 0, n){
+                    dp[i][j] = min(dp[i][j], dp[i][k] + dp[k][j]);
+                }
+            }
+            ll sum = 0;
+            fori(i, 0, via + 1){
+                fori(j, 0, via + 1){
+                    sum += dp[v[i] - 1][v[j] - 1];
+                }
+            }
+            final.pb(sum);
+        }
+        reverse(all(final));
+        cv(final);
+        sahil:; 
+    }
+    return 0;
+}
