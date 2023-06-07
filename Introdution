@@ -147,3 +147,58 @@ int main(){
 }
 
 ------------------------------------------------------------------------
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0); 
+    ll T;
+    cin >> T;
+    while(T--){
+        ll n, m; cin >> n >> m;
+        vector<vector<ll>> v(n, vector<ll> (m));
+        ll mx = -1;
+        fori(i, 0, n){
+            fori(j, 0, m){
+                cin >> v[i][j];
+                mx = max(mx, v[i][j]);
+            }
+        }
+        queue<pair<ll, ll>> Q;
+        vector<vector<ll>> level(n, vector<ll> (m, INT_MAX)); 
+        fori(i, 0, n){
+            fori(j, 0, m){
+                if(v[i][j] == mx){
+                    Q.push({i, j});
+                    level[i][j] = 0;
+                }
+            }
+        }
+        vector<pair<ll, ll>> movement = {
+            {0, -1}, {-1, 0}, {1, 0}, {0, 1},
+            {1, 1}, {1, -1}, {-1, 1}, {-1, -1} 
+        };
+        ll ans = 0;
+        while(!Q.empty()){
+            auto i = Q.front();
+            Q.pop();
+            ll x = i.ff, y = i.ss;
+            for(auto k : movement){
+                ll xx = x + k.ff, yy = y + k.ss;
+                if(xx >= 0 && xx < n && yy >= 0 && yy < m){
+                    if(level[x][y] + 1 < level[xx][yy]){
+                        Q.push({xx, yy});
+                        level[xx][yy] = level[x][y] + 1;
+                        ans = max(ans, level[xx][yy]);
+                    }
+                }
+            }
+        }
+        cout << ans << endl;
+        sahil:; 
+    }
+    return 0;
+}
+
+-----------------------------------------------------------------------------
+
+
