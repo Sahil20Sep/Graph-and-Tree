@@ -22,10 +22,7 @@ public:
                         for(auto k : movement){
                             int xx = k.first + x;
                             int yy = k.second + y;
-                            if(xx >= 0 && xx < n && yy >= 0 && yy < m && v[xx][yy] == 'O'){
-                                if(visited[xx][yy]){
-                                    continue;
-                                }
+                            if(xx >= 0 && xx < n && yy >= 0 && yy < m && v[xx][yy] == 'O' && !visited[xx][yy]){
                                 visited[xx][yy] = true;
                                 Q.push({xx, yy});
                                 store.push_back({xx, yy});
