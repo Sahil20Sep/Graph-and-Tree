@@ -272,3 +272,64 @@ vector<vector<ll>> dist(n, vector<ll> (n, INT_MAX));
     }
     
 -------------------------------------------------------------------------------------------------
+
+                            (Kruskal's Algo) - Minimum spanning tree
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0); 
+    ll T = 1;
+    // cin >> T;
+    while(T--){
+        ll n; cin >> n;
+        dsu<ll> obj(n);
+        vector<pair<ll, ll>> yam(n + 1);
+        fori(i, 1, n + 1){
+            cin >> yam[i].ff >> yam[i].ss;
+        }
+        // cp(yam);
+        vector<ll> cost(n + 1);
+        fori(i, 1, n + 1){
+            cin >> cost[i];
+        }
+        vector<ll> dist(n + 1);
+        fori(i, 1, n + 1){
+            cin >> dist[i];
+        }
+        vector<pair<ll, pair<ll, ll>>> edges;
+        fori(i, 1, n + 1){
+            edges.pb({cost[i], {0, i}});
+        }
+        fori(i, 1, n + 1){
+            fori(j, i + 1, n + 1){
+                ll wire = abs(yam[i].ff - yam[j].ff) + abs(yam[i].ss - yam[j].ss);
+                ll pdu = wire * (dist[i] + dist[j]);
+                edges.pb({pdu , {i, j}});
+            }
+        }
+        sort(all(edges));
+        ll final = 0;
+        vector<ll> power;
+        vector<pair<ll, ll>> couple;
+        for(auto i : edges){
+            ll wt = i.ff;
+            ll u = i.ss.ff;
+            ll v = i.ss.ss;
+            if(obj.getp(u) == obj.getp(v)){
+                continue;
+            }
+            obj.merge(u, v);
+            final += wt;
+            if(u == 0){
+                power.pb(v);
+            }else{
+                couple.pb({u, v});
+            }
+        }
+        c(final); 
+        c(sz(power)); cv(power); 
+        c(sz(couple)); cp(couple);
+        sahil:; 
+    }
+    return 0;
+}
