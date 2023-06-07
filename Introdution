@@ -148,6 +148,8 @@ int main(){
 
 ------------------------------------------------------------------------
 
+                    (Multi-Source BFS)
+
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0); 
@@ -200,5 +202,48 @@ int main(){
 }
 
 -----------------------------------------------------------------------------
+
+                            (Dijstra)
+                            
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        int u = times.size(), v = times[0].size();
+        vector<vector<pair<int, int>>> graph(n + 1);
+        for(int i = 0; i < u; i++){
+            graph[times[i][0]].push_back({times[i][1], times[i][2]});
+        }
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> Q;
+        Q.push({0, k});
+        vector<bool> visited(n + 1, false);
+        vector<int> level(n + 1, INT_MAX);
+        level[k] = 0;
+        while(!Q.empty()){
+            auto i = Q.top();
+            Q.pop();
+            int x = i.first, y = i.second;
+            if(visited[y]){
+                continue;
+            }
+            visited[y] = true;
+            for(auto child : graph[y]){
+                int xx = child.first;
+                int yy = child.second;
+                if(level[y] + yy < level[xx]){
+                    level[xx] = level[y] + yy;
+                    Q.push({level[xx], xx});
+                }
+            }
+        }
+        int ans = INT_MIN;
+        for(int i = 1; i <= n; i++){
+            ans = max(ans, level[i]);
+        }
+        return ans == INT_MAX ? -1 : ans;
+    }
+};
+
+--------------------------------------------------------------------------------------------------
+
 
 
