@@ -1,6 +1,6 @@
 graph[i][j] = 1 or wt (matrix but not usefull because of space complexity) O(n^2)
 
-graph[i].push_back(j); (list useful) O(v + e)
+graph[i].push_back(j); (list useful) O(v + e) O(2 * E) --> undirected , O(E) --> direceted
 
 wity weight 
 graph[i].push_back({j, wt});
