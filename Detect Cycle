@@ -54,4 +54,4 @@ bool dfs(int vertex, int par, vector<bool> &visited, vector<int> adj[]){
         return false;
     }
     
-O(N + 2 * E)
+O(N + 2 * E) + O(N)
