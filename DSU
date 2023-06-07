@@ -35,3 +35,69 @@ class dsu{
             sz[p2] = 0;
         }
 };
+
+-----------------------------------------------------
+
+template<typename T>
+class dsu{
+    public:
+        vector<T> par, sz;
+        ll n;
+        multiset<T> ms;
+        
+        dsu(ll x){
+            n = x;
+            par.resize(n + 1);
+            sz.resize(n + 1);
+            fori(i, 1, n + 1){
+                par[i] = i;
+                sz[i] = 1;
+                ms.insert(1);
+            }
+        }
+
+        void func(T a, T b){
+            ms.erase(ms.find(sz[a]));
+            ms.erase(ms.find(sz[b]));
+            ms.insert(sz[a] + sz[b]);
+        }
+ 
+        T getp(T x){
+            while(par[x] != x){
+                par[x] = par[par[x]];
+                x = par[x];
+            }
+            return x;
+        }
+ 
+        void merge(T a, T b){
+            T p1 = getp(a), p2 = getp(b);
+            if(p1 == p2){
+                return;
+            }
+            if(sz[p2] > sz[p1]){
+                swap(p1, p2);
+            }
+            func(p1, p2);
+            par[p2] = p1;
+            sz[p1] += sz[p2];
+            sz[p2] = 0;
+        }
+};
+
+while(T--){
+    ll n, q; cin >> n >> q;
+    dsu<ll> obj(n);
+    while(q--){
+        ll u, v; cin >> u >> v;
+        obj.merge(u, v);
+        if(obj.ms.size() == 1){
+            c(0);
+        }else{
+            ll mn = *(obj.ms.begin());
+            ll mx = *(--obj.ms.end());
+            c(mx - mn);
+        }
+    }
+    sahil:; 
+}
