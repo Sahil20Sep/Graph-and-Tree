@@ -1,0 +1,48 @@
+class Solution {
+public:
+    void solve(vector<vector<char>>& v) {
+        int n = v.size(), m = v[0].size();
+        vector<vector<bool>> visited(n, vector<bool> (m, false));
+        vector<pair<int, int>> movement = {
+            {0, -1}, {-1, 0}, {0, 1}, {1, 0}
+        };
+        vector<pair<int, int>> store;
+        for(int i = 1; i < n - 1; i++){
+            for(int j = 1; j < m - 1; j++){
+                if(!visited[i][j] && v[i][j] == 'O'){
+                    bool flag = true;
+                    queue<pair<int, int>> Q;
+                    Q.push({i, j});
+                    store.push_back({i, j});
+                    visited[i][j] = true;
+                    while(!Q.empty()){
+                        auto z = Q.front();
+                        Q.pop();
+                        int x = z.first, y = z.second;
+                        for(auto k : movement){
+                            int xx = k.first + x;
+                            int yy = k.second + y;
+                            if(xx >= 0 && xx < n && yy >= 0 && yy < m && v[xx][yy] == 'O'){
+                                if(visited[xx][yy]){
+                                    continue;
+                                }
+                                visited[xx][yy] = true;
+                                Q.push({xx, yy});
+                                store.push_back({xx, yy});
+                                if(xx == 0 || xx == n - 1 || yy == 0 || yy == m - 1){
+                                    flag = false;
+                                }
+                            }
+                        }
+                    }
+                    if(flag){
+                        for(auto g : store){
+                            v[g.first][g.second] = 'X';
+                        }
+                    }
+                    store.clear();
+                }
+            }
+        }
+    }
+};
