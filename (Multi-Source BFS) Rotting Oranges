@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& v) {
+        int n = v.size(), m = v[0].size();
+        vector<vector<int>> level(n, vector<int> (m, INT_MAX));
+        queue<pair<int, int>> Q;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(v[i][j] == 2){
+                    Q.push({i, j});
+                    level[i][j] = 0;
+                }
+            }
+        }
+        vector<pair<int, int>> movement = {
+            {0, -1}, {-1, 0}, {0, 1}, {1, 0}
+        };
+        int ans = 0;
+        while(!Q.empty()){
+            auto i = Q.front();
+            Q.pop();
+            int x = i.first, y = i.second;
+            for(auto k : movement){
+                int xx = k.first + x;
+                int yy = k.second + y;
+                if(xx >= 0 && xx < n && yy >= 0 && yy < m && v[xx][yy] == 1){
+                    if(level[x][y] + 1 < level[xx][yy]){
+                        Q.push({xx, yy});
+                        level[xx][yy] = level[x][y] + 1;
+                        ans = max(ans, level[xx][yy]);
+                    }
+                }
+            }
+        }
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(v[i][j] == 1 && level[i][j] == INT_MAX){
+                    return -1;
+                }
+            }
+        }
+        return ans;
+    }
+};
