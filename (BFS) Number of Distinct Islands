@@ -36,3 +36,5 @@ int countDistinctIslands(vector<vector<int>>& v) {
         }
         return (int)ms.size();
     }
+    
+    TC --> (n * m * log(set.size())) + (n * m * 4)
