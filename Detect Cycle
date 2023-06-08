@@ -55,3 +55,38 @@ bool dfs(int vertex, int par, vector<bool> &visited, vector<int> adj[]){
     }
     
 O(N + 2 * E) + O(N)
+
+---------------------------------------------------------------------------------------------
+
+bool dfs(int vertex, vector<bool> &visited, vector<bool> &path, vector<int>adj[]){
+        visited[vertex] = true;
+        path[vertex] = true;
+        bool flag = false;
+        for(auto child : adj[vertex]){
+            if(visited[child]){
+                if(path[child]){
+                    return true;
+                }else{
+                    continue;
+                }
+            }
+            flag |= dfs(child, visited, path, adj);
+        }
+        path[vertex] = false;
+        return flag;
+    }
+  
+    bool isCyclic(int V, vector<int>adj[]) {
+        int n = V;
+        vector<bool> visited(n, false), path(n, false);
+        for(int i = 0; i < n; i++){
+            if(!visited[i]){
+                if(dfs(i, visited, path, adj)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+O (N + E);
