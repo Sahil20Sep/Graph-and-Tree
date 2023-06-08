@@ -1,0 +1,38 @@
+int countDistinctIslands(vector<vector<int>>& v) {
+        int n = v.size(), m = v[0].size();
+        vector<vector<bool>> visited(n, vector<bool> (m, false));
+        vector<pair<int, int>> movement = {
+            {-1, 0}, {0, -1}, {1, 0}, {0, 1}  
+        };
+        set<vector<pair<int, int>>> ms;
+        vector<pair<int, int>> store;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(!visited[i][j] && v[i][j]){
+                    queue<pair<int, int>> Q;
+                    Q.push({i, j});
+                    store.push_back({0, 0});
+                    visited[i][j] = true;
+                    while(!Q.empty()){
+                        auto row = Q.front().first;
+                        auto col = Q.front().second;
+                        Q.pop();
+                        for(auto k : movement){
+                            int xx = row + k.first;
+                            int yy = col + k.second;
+                            if(xx >= 0 && xx < n && yy >= 0 && yy < m && v[xx][yy] && !visited[xx][yy]){
+                                Q.push({xx, yy});
+                                visited[xx][yy] = true;
+                                store.push_back({xx - i, yy - j});
+                            }
+                        }
+                    }
+                    if(ms.find(store) == ms.end()){
+                        ms.insert(store);
+                    }
+                    store.clear();
+                }
+            }
+        }
+        return (int)ms.size();
+    }
