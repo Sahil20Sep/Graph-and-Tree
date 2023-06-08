@@ -7,8 +7,6 @@ graph[i].push_back({j, wt});
 
 -----------------------------------------------------------------------------------------
 
-Bieperitie graph is linear and even cycle length if odd length then not bipertite graph
-
                             (DFS)
 
 void dfs(ll vertex){
@@ -339,3 +337,39 @@ int main(){
     }
     return 0;
 }
+
+-------------------------------------------------------------------------
+
+Bieperitie graph is linear and even cycle length if odd length then not bipertite graph
+
+class Solution {
+public:
+    bool isBipartite(vector<vector<int>>& v) {
+        int n = v.size();
+        vector<int> visited(n, 0);
+        for(int i = 0; i < n; i++){
+            if(!visited[i]){
+                queue<pair<int, int>> Q;
+                Q.push({i, -1});
+                visited[i] = -1;
+                while(!Q.empty()){
+                    auto k = Q.front();
+                    Q.pop();
+                    int x = k.first, y = k.second;
+                    for(auto child : v[x]){
+                        if(visited[child]){
+                            if(visited[x] == visited[child]){
+                                return false;
+                            }else{
+                                continue;
+                            }
+                        }
+                        visited[child] = (visited[x] == -1) ? 1 : -1;
+                        Q.push({child, x});
+                    }
+                }
+            }
+        }
+        return true;
+    }
+};
