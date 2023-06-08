@@ -7,6 +7,8 @@ graph[i].push_back({j, wt});
 
 -----------------------------------------------------------------------------------------
 
+Bieperitie graph is linear and even cycle length if odd length then not bipertite graph
+
                             (DFS)
 
 void dfs(ll vertex){
