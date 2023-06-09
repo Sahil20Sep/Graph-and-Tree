@@ -439,3 +439,39 @@ void dfs(int vertex, vector<bool> &visited, vector<int> adj[], stack<int> &st){
 	    }
 	    return ans;
 	}
+	
+	
+	(Khan's algo)
+
+vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    int n = V;
+	    vector<int> in(n, 0);
+	    for(int i = 0; i < n; i++){
+	        for(auto child : adj[i]){
+	            in[child] += 1;
+	        }
+	    }
+	    queue<int> Q;
+	    for(int i = 0; i < n; i++){
+	        if(!in[i]){
+	            Q.push(i);
+	        }
+	    }
+	    vector<int> ans;
+	    while(!Q.empty()){
+	        auto vertex = Q.front();
+	        Q.pop();
+	        ans.push_back(vertex);
+	        for(auto child : adj[vertex]){
+	            in[child] -= 1;
+	            if(!in[child]){
+	                Q.push(child);
+	            }
+	        }
+	    }
+	    return ans;
+	}
+
+---------------------------------------------------------------------------
+
