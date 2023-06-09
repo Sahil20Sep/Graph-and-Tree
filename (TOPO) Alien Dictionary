@@ -1,0 +1,50 @@
+string findOrder(string dict[], int n, int k) {
+        vector<int> in(k, 0);
+        vector<vector<int>> graph(k);
+        for(int i = 0; i < n - 1; i++){
+            string s = dict[i];
+            string t = dict[i + 1];
+            for(int j = 0; j < min(s.size(), t.size()); j++){
+                if(s[j] != t[j]){
+                    graph[s[j] - 'a'].push_back(t[j] - 'a');
+                    break;
+                }
+            }
+        }
+        for(auto i : graph){
+            for(auto j : i){
+                in[j]++;
+            }
+        }
+        queue<int> Q;
+        for(int i = 0; i < k; i++){
+            if(!in[i]){
+                Q.push(i);
+            }
+        }
+        string s = "";
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+            char x = f + 'a';
+            s.push_back(x);
+            for(auto child : graph[f]){
+                in[child]--;
+                if(!in[child]){
+                    Q.push(child);
+                }
+            }
+        }
+        return s;
+    }
+    
+    
+    abcd
+    abc
+    
+    abc
+    bat
+    abc
+    
+    above two test case not work
+    
