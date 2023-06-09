@@ -90,3 +90,5 @@ bool dfs(int vertex, vector<bool> &visited, vector<bool> &path, vector<int>adj[]
     }
     
 O (N + E);
+
+also prove by topological sort
