@@ -1,0 +1,44 @@
+class Solution {
+public:
+
+    bool dfs(int vertex, vector<bool> &visited, vector<bool> &path, vector<vector<int>>& v, vector<int> &store){
+        visited[vertex] = true;
+        path[vertex] = true;
+        bool flag = false;
+        for(auto child : v[vertex]){
+            if(visited[child]){
+                if(path[child]){
+                    return true;
+                }else{
+                    continue;
+                }
+            }
+            flag |= dfs(child, visited, path, v, store);
+            if(flag){
+                return true;
+            }
+        }
+        store[vertex] = 1;
+        path[vertex] = false;
+        return flag;
+    }
+
+    vector<int> eventualSafeNodes(vector<vector<int>>& v) {
+        int n = v.size();
+        vector<bool> visited(n, false), path(n, false);
+        vector<int> store(n, 0);
+        for(int i = 0; i < n; i++){
+            if(!visited[i]){
+                store.clear();
+                dfs(i, visited, path, v, store);
+            }
+        }
+        vector<int> ans;
+        for(int i = 0; i < n; i++){
+            if(store[i]){
+                ans.push_back(i);
+            }
+        }
+        return ans;
+    }
+};
