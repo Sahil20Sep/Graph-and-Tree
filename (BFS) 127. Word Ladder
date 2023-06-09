@@ -1,12 +1,12 @@
 class Solution {
 public:
     int ladderLength(string s, string t, vector<string>& v) {
-        map<string, bool> hash;
+        set<string> ms;
         int n = v.size();
         for(int i = 0; i < n; i++){
-            hash[v[i]] = true;
+            ms.insert(v[i]);
         }
-        if(!hash[t] || s.size() != t.size()){
+        if(ms.find(t) == ms.end() || s.size() != t.size()){
             return 0;
         }
         queue<pair<string, int>> Q;
@@ -15,16 +15,16 @@ public:
             auto f = Q.front();
             string a = f.first;
             int b = f.second;
+            Q.pop();
             if(a == t){
                 return b;
             }
-            Q.pop();
             for(int i = 0; i < a.size(); i++){
                 string temp = a;
                 for(int j = 0; j < 26; j++){
                     temp[i] = char('a' + j);
-                    if(hash[temp]){
-                        hash[temp] = false;
+                    if(ms.find(temp) != ms.end()){
+                        ms.erase(temp);
                         Q.push({temp, b + 1});
                     }
                 }
