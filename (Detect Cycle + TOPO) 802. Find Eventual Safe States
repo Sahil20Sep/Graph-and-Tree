@@ -42,3 +42,41 @@ public:
         return ans;
     }
 };
+
+---------------------------------------------------
+
+class Solution {
+public:
+
+    vector<int> eventualSafeNodes(vector<vector<int>>& v) {
+        int n = v.size();
+        vector<vector<int>> graph(n);
+        for(int i = 0; i < n; i++){
+            for(auto j : v[i]){
+                graph[j].push_back(i);
+            }
+        }
+        vector<int> out(n, 0);
+        queue<int> Q;
+        for(int i = 0; i < n; i++){
+            out[i] = v[i].size();
+            if(!out[i]){
+                Q.push(i);
+            }
+        }
+        vector<int> ans;
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+            ans.push_back(f);
+            for(auto child : graph[f]){
+                out[child]--;
+                if(!out[child]){
+                    Q.push(child);
+                }
+            }
+        }
+        sort(ans.begin(), ans.end());
+        return ans;
+    }
+};
