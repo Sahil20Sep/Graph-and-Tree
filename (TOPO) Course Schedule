@@ -29,3 +29,40 @@ public:
         return cnt == k ? true : false;
     }
 };
+
+class Solution {
+public:
+    vector<int> findOrder(int k, vector<vector<int>>& v) {
+        int n = v.size();
+        vector<vector<int>> graph(k);
+        vector<int> in(k, 0);
+        for(int i = 0; i < n; i++){
+            in[v[i][0]]++;
+            graph[v[i][1]].push_back(v[i][0]);
+        }
+        queue<int> Q;
+        for(int i = 0; i < k; i++){
+            if(!in[i]){
+                Q.push(i);
+            }
+        }
+        vector<int> ans;
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+            ans.push_back(f);
+            for(auto child : graph[f]){
+                in[child]--;
+                if(!in[child]){
+                    Q.push(child);
+                }
+            }
+        }
+        if(ans.size() == k){
+            return ans;
+        }else{
+            ans.clear();
+            return ans;
+        }
+    }
+};
