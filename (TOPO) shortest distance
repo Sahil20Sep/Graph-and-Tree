@@ -78,3 +78,8 @@ void dfs(int vertex, vector<bool> &visited, stack<int> &st, vector<vector<pair<i
         }
         return dist;
     }
+
+
+O( N + E);
+
+the element on the top of the stack is source and sequencially find the dist.
