@@ -33,3 +33,62 @@ public:
         return 0;
     }
 };
+
+-----------------------------------------------------------------
+
+class Solution {
+public:
+    vector<vector<string>> findLadders(string s, string t, vector<string>& v) {
+        set<string> ms;
+        int n = v.size();
+        for(int i = 0; i < n; i++){
+            ms.insert(v[i]);
+        }
+        if(ms.find(t) == ms.end() || s.size() != t.size()){
+            return {};
+        }
+        queue<vector<string>> Q;
+        vector<vector<string>> ans;
+        Q.push({s});
+        int level = 0;
+        vector<string> used;
+        used.push_back(s);
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+            if(f.size() > level){
+                level++;
+                for(auto i : used){
+                    ms.erase(i);
+                }
+                used.clear();
+            }
+            string a = f[f.size() - 1];
+            if(a == t){
+                if(ans.empty()){
+                    ans.push_back(f);
+                }else if(ans[0].size() == f.size()){
+                    ans.push_back(f);
+                }
+                continue;
+            }
+            for(int i = 0; i < a.size(); i++){
+                string temp = a;
+                for(int j = 0; j < 26; j++){
+                    temp[i] = char('a' + j);
+                    if(ms.find(temp) != ms.end()){
+                        f.push_back(temp);
+                        used.push_back(temp);
+                        Q.push(f);
+                        f.pop_back();
+                    }
+                }
+            }
+        }
+        if(ans.empty()){
+            return {};
+        }else{
+            return ans;
+        }
+    }
+};
