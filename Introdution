@@ -406,3 +406,36 @@ public:
         return true;
     }
 };
+
+---------------------------------------------------------------------------------------
+
+                        (Topologgical sort) for DAG
+
+void dfs(int vertex, vector<bool> &visited, vector<int> adj[], stack<int> &st){
+	    visited[vertex] = true;
+	    for(auto child : adj[vertex]){
+	        if(!visited[child]){
+	            dfs(child, visited, adj, st);
+	        }
+	    }
+	    st.push(vertex);
+	}
+	
+	//Function to return list containing vertices in Topological order. 
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    int n = V;
+	    stack<int> st;
+	    vector<bool> visited(n, false);
+	    for(int i = 0; i < n; i++){
+	        if(!visited[i]){
+	            dfs(i, visited, adj, st);
+	        }
+	    }
+	    vector<int> ans;
+	    while(!st.empty()){
+	        ans.push_back(st.top());
+	        st.pop();
+	    }
+	    return ans;
+	}
