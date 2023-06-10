@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int minimumEffortPath(vector<vector<int>>& v) {
+        int n = v.size(), m = v[0].size();
+
+        vector<pair<int, int>> movement = {
+            {0, -1}, {0, 1}, {1, 0}, {-1, 0}
+        };
+
+        set<pair<int, pair<int, int>>> ms;
+        ms.insert({0, {0, 0}});
+
+        vector<vector<int>> dist(n, vector<int> (m, 1e9));
+        dist[0][0] = 0;
+
+        while(!ms.empty()){
+            auto f = *(ms.begin());
+            ms.erase(f);
+            int step = f.first;
+            int x = f.second.first, y = f.second.second;
+            if(x == n - 1 && y == m - 1){
+                return step;
+            }
+            for(auto k : movement){
+                int xx = x + k.first;
+                int yy = y + k.second;
+                if(xx >= 0 && xx < n && yy >= 0 && yy < m){
+                    int wt = max(dist[x][y], abs(v[x][y] - v[xx][yy]));
+                    if(wt < dist[xx][yy]){
+                        dist[xx][yy] = wt;
+                        ms.insert({wt, {xx, yy}});
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+};
