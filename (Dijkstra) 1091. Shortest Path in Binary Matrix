@@ -38,3 +38,44 @@ public:
         }
     }
 };
+
+---------------------------------------
+
+int n = v.size(), m = v[0].size();
+        int a = s.first, b = s.second;
+        int c = t.first, d = t.second;
+        if(v[a][b] == 0 || v[c][d] == 0){
+            return -1;
+        }
+        set<pair<int, int>> ms;
+        ms.insert({a, b});
+
+        vector<vector<int>> dist(n, vector<int> (m, 1e9));
+        dist[a][b] = 0;
+
+        vector<pair<int, int>> movement = {
+            {1, 0}, {-1, 0}, {0, 1}, {0, -1}
+        };
+
+        while(!ms.empty()){
+            auto f = *(ms.begin());
+            ms.erase(f);
+            int x = f.first, y = f.second;
+            if(x == c && y == d){
+                return dist[c][d];
+            }
+            for(auto k : movement){
+                int xx = x + k.first;
+                int yy = y + k.second;
+                if(xx >= 0 && yy >= 0 && yy < m && xx < n && v[xx][yy] == 1){
+                    if(dist[x][y] + 1 < dist[xx][yy]){
+                        ms.insert({xx, yy});
+                        dist[xx][yy] = dist[x][y] + 1;
+                    }
+                }
+            }
+        }
+        return -1;
+        
+        
+there is level by level so don't use set, use queue
