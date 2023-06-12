@@ -1,0 +1,45 @@
+class Solution {
+public:
+
+    const int mod = 1e9 + 7;
+
+    int countPaths(int n, vector<vector<int>>& v) {
+        vector<vector<pair<int, int>>> graph(n);
+        for(int i = 0; i < v.size(); i++){
+            graph[v[i][0]].push_back({v[i][1], v[i][2]});
+            graph[v[i][1]].push_back({v[i][0], v[i][2]});
+        }
+
+        vector<long long> ways(n, 0);
+        ways[0] = 1;
+
+        vector<long long> dist(n, 2e13);
+        dist[0] = 0;
+
+        priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> Q;
+        Q.push({0, 0});
+
+        while(!Q.empty()){
+            auto f = Q.top();
+            Q.pop();
+            long long d = f.first, vertex = f.second;
+            if(vertex == n - 1){
+                continue;
+            }
+            for(auto child : graph[vertex]){
+                int ch = child.first;
+                long long wt = child.second;
+                if(d + wt == dist[ch]){
+                    ways[ch] = (ways[ch] + ways[vertex]) % mod;
+                }
+                if(d + wt < dist[ch]){
+                    dist[ch] = d + wt;
+                    Q.push({d + wt, ch});
+                    ways[ch] = ways[vertex] % mod;
+                }
+            }
+
+        }
+        return ways[n - 1] % mod;
+    }
+};
