@@ -1,0 +1,24 @@
+int minimumMultiplications(vector<int>& v, int start, int end) {
+        vector<int> dist(1e5, 1e9);
+        dist[start] = 0;
+        
+        queue<pair<int, int>> Q;
+        Q.push({0, start});
+        
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+            int step = f.first, a = f.second;
+            for(auto i : v){
+                int num = (i * a) % mod;
+                if(step + 1 < dist[num]){
+                    dist[num] = step + 1;
+                    Q.push({step + 1, num});
+                    if(num == end){
+                        return dist[num];
+                    }
+                }
+            }
+        }
+        return -1;
+    }
