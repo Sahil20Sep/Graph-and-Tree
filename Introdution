@@ -281,6 +281,8 @@ city[i][i] < 0 negetive cyclle
 
                             (Kruskal's Algo) - Minimum spanning tree
 
+N node and N - 1 edges and reachable to each node to each nod
+
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0); 
