@@ -279,6 +279,65 @@ city[i][i] < 0 negetive cyclle
     
 -------------------------------------------------------------------------------------------------
 
+(DSU)
+
+template<typename T>
+class dsu{
+    public:
+        vector<T> par, sz;
+        ll n;
+        
+        dsu(ll x){
+            n = x;
+            par.resize(n + 1);
+            sz.resize(n + 1);
+            fori(i, 0, n + 1){
+                par[i] = i;
+                sz[i] = 1;
+            }
+        }
+
+        T getp(T x){
+            while(par[x] != x){
+                par[x] = par[par[x]];
+                x = par[x];
+            }
+            return x;
+        }
+
+        void rank(T a, T b){
+            T p1 = getp(a), p2 = getp(b);
+            if(p1 == p2){
+                return;
+            }
+            if(rank[p1] == rank[p2]){
+                rank[p1]++;
+                parent[p2] = p1;
+            }else{
+                if(rank[p1] < rank[p2]){
+                    parent[p1] = p2;
+                }else{
+                    parent[p2] = p1;
+                }
+            }
+        }
+
+        void merge(T a, T b){
+            T p1 = getp(a), p2 = getp(b);
+            if(p1 == p2){
+                return;
+            }
+            if(sz[p2] > sz[p1]){
+                swap(p1, p2);
+            }
+            par[p2] = p1;
+            sz[p1] += sz[p2];
+            sz[p2] = 0;
+        }
+};
+
+----------------------------------------------------------------------------------------------------
+
                             (Kruskal's Algo) - Minimum spanning tree
 
 N node and N - 1 edges and reachable to each node to each nod
