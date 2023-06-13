@@ -598,3 +598,66 @@ vector<int> bellman_ford(int n, vector<vector<int>>& v, int S) {
 
 if on nTH itreation if i get updated distance so it has negetive cycle.
 
+-----------------------------------------------------------------------------------------
+
+	(Kosaraju's Algorithms) strongly connected components only for weighted graph
+
+Every pair of vertex reachable for each vertex
+
+1. sort all the edges by their finishing time
+2. reverse the graph
+3. run dfs
+
+void dfs1(int vertex, vector<bool> &visited, vector<vector<int>> &adj, stack<int> &st){
+    visited[vertex] = true;
+    for(auto child : adj[vertex]){
+	if(!visited[child]){
+	    dfs1(child, visited, adj, st);
+	}
+    }
+    st.push(vertex);
+}
+	
+void dfs2(int vertex, vector<bool> &visited, vector<vector<int>> &adj){
+    visited[vertex] = true;
+    for(auto child : adj[vertex]){
+	if(!visited[child]){
+	    dfs2(child, visited, adj);
+	}
+    }
+}
+	
+int kosaraju(int n, vector<vector<int>>& adj)
+{
+vector<bool> visited(n, false);
+
+stack<int> st;
+
+for(int i = 0; i < n; i++){
+    if(!visited[i]){
+	dfs1(i, visited, adj, st);
+    }
+}
+
+vector<vector<int>> v(n);
+
+for(int i = 0; i < n; i++){
+    visited[i] = false;
+    for(auto it : adj[i]){
+	v[it].push_back(i);
+    }
+}
+
+int cnt = 0;
+
+while(!st.empty()){
+    auto f = st.top();
+    st.pop();
+    if(!visited[f]){
+	cnt++;
+	dfs2(f, visited, v);
+    }
+}
+
+return cnt;
+}
