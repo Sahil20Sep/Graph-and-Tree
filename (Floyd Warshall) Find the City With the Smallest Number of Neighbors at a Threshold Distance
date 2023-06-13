@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int findTheCity(int n, vector<vector<int>>& edges, int dis) {
+        vector<vector<int>> f(n, vector<int> (n, 1e9));
+        for(int i = 0; i < n; i++){
+            f[i][i] = 0;
+        }
+        for(auto it : edges){
+            int u = it[0], v = it[1], wt = it[2];
+            f[u][v] = wt;
+            f[v][u] = wt;
+        }
+        for(int via = 0; via < n; via++){
+            for(int i = 0; i < n; i++){
+                for(int j = 0; j < n; j++){
+                    f[i][j] = min(f[i][j], f[i][via] + f[via][j]);
+                }
+            }
+        }
+        int mn = n, city = n;
+        for(int i = 0; i < n; i++){
+            int ans = 0;
+            for(int j = 0; j < n; j++){
+                if(f[i][j] <= dis){
+                    ans += 1;
+                }
+            }
+            if(ans <= mn){
+                mn = ans;
+                city = i;
+            }
+        }
+        return city;
+    }
+};
