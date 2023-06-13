@@ -475,3 +475,29 @@ vector<int> topoSort(int V, vector<int> adj[])
 
 ---------------------------------------------------------------------------
 
+			(Belmen ford)
+
+to detect negative cycle --> do n - 1 itreation and store distance in array
+
+vector<int> bellman_ford(int n, vector<vector<int>>& v, int S) {
+        vector<int> dist(n, 1e8);
+        dist[S] = 0;
+        for(int i = 0; i < n - 1; i++){
+            for(auto it : v){
+                int u = it[0], w = it[1], wt = it[2];
+                if(dist[u] + wt < dist[w]){
+                    dist[w] = dist[u] + wt;
+                }
+            }
+        }
+        for(auto it : v){
+            int u = it[0], w = it[1], wt = it[2];
+            if(dist[u] + wt < dist[w]){
+                return {-1};
+            }
+        }
+        return dist;
+    }
+
+if on nTH itreation if i get updated distance so it has negetive cycle.
+
