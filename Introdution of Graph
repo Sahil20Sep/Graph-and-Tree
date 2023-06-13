@@ -342,6 +342,40 @@ int main(){
     return 0;
 }
 
+--------------------------------------------------------------------------------------------------
+
+			Minimum Spanning tree - (prim's Algo) --> (E logE)
+you can take any node not only 0.
+
+int spanningTree(int V, vector<vector<int>> adj[])
+    {
+        int n = V;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> Q;
+        Q.push({0, 0});
+        
+        vector<bool> visited(n, false);
+        
+        int sum = 0;
+        
+        while(!Q.empty()){
+            auto f = Q.top();
+            Q.pop();
+            int wt = f.first, node = f.second;
+            if(visited[node]){
+                continue;
+            }
+            visited[node] = 1;
+            sum += wt;
+            for(auto it : adj[node]){
+                int child = it[0], wwt = it[1];
+                if(!visited[child]){
+                    Q.push({wwt, child});
+                }
+            }
+        }
+        return sum;
+    }
+
 -------------------------------------------------------------------------
 
 Bieperitie graph is linear and even cycle length if odd length then not bipertite graph
