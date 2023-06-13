@@ -1,0 +1,81 @@
+template<typename T>
+    class dsu{
+        public:
+            vector<T> par, sz, rank;
+            int n;
+            
+            dsu(int x){
+                n = x;
+                par.resize(n + 1);
+                sz.resize(n + 1);
+                rank.resize(n + 1);
+                for(int i = 0; i <= n; i++){
+                    par[i] = i;
+                    sz[i] = 1;
+                    rank[i] = 0;
+                }
+            }
+    
+            T getp(T x){
+                while(par[x] != x){
+                    par[x] = par[par[x]];
+                    x = par[x];
+                }
+                return x;
+            }
+    
+            void r(T a, T b){
+                T p1 = getp(a), p2 = getp(b);
+                if(p1 == p2){
+                    return;
+                }
+                if(rank[p1] == rank[p2]){
+                    rank[p1]++;
+                    par[p2] = p1;
+                }else{
+                    if(rank[p1] < rank[p2]){
+                        par[p1] = p2;
+                    }else{
+                        par[p2] = p1;
+                    }
+                }
+            }
+    
+            void merge(T a, T b){
+                T p1 = getp(a), p2 = getp(b);
+                if(p1 == p2){
+                    return;
+                }
+                if(sz[p2] > sz[p1]){
+                    swap(p1, p2);
+                }
+                par[p2] = p1;
+                sz[p1] += sz[p2];
+                sz[p2] = 0;
+            }
+    };
+
+class Solution {
+public:
+    int removeStones(vector<vector<int>>& v) {
+        int x = 0, y = 0;
+        for(auto it : v){
+            x = max(x, it[0]);
+            y = max(y, it[1]);
+        }
+
+        dsu<int> obj(x + 1 + y + 1);
+
+        for(auto it : v){
+            int row = it[0];
+            int col = x + it[1] + 1;
+            obj.merge(row, col);
+        }
+
+        set<int> ms;
+        for(auto it : v){
+            ms.insert(obj.getp(it[0]));
+        }
+        return v.size() - (int)ms.size();
+    }
+};
