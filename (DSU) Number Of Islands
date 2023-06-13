@@ -1,0 +1,36 @@
+vector<int> numOfIslands(int n, int m, vector<vector<int>> &k) {
+        
+        dsu<int> obj(n * m);
+        
+        vector<int> ans;
+        
+        vector<pair<int, int>> movement = {
+            {1, 0}, {0, 1}, {-1, 0}, {0, -1} 
+        };
+        
+        vector<vector<bool>> visited(n, vector<bool> (m, false));
+        
+        int cnt = 0;
+        
+        for(auto it : k){
+            int row = it[0], col = it[1];
+            if(visited[row][col]){
+                ans.push_back(cnt);
+                continue;
+            }
+            cnt++;
+            visited[row][col] = true;
+            for(auto f : movement){
+                int xx = row + f.first, yy = col + f.second;
+                if(xx >= 0 && xx < n && yy >= 0 && yy < m && visited[xx][yy]){
+                    int a = row * m + col, b = xx * m + yy;
+                    if(obj.getp(a) != obj.getp(b)){
+                        cnt--;
+                        obj.merge(a, b);
+                    }
+                }
+            }
+            ans.push_back(cnt);
+        }
+        return ans;
+    }
