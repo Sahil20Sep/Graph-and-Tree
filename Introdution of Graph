@@ -661,3 +661,54 @@ while(!st.empty()){
 
 return cnt;
 }
+
+---------------------------------------------------------------------------------------
+
+			(Targan's Algorithms)
+
+class Solution {
+public:
+
+    void dfs(int vertex, int parent, vector<int> &timer, vector<int> &low, vector<bool> &visited, vector<vector<int>> &graph, int cnt, vector<vector<int>> &ans){
+
+        timer[vertex] = cnt;
+        visited[vertex] = true;
+        low[vertex] = cnt;
+        cnt++;
+
+        for(auto child : graph[vertex]){
+            if(child == parent){
+                continue;
+            }
+            if(visited[child]){
+                low[vertex] = min(low[vertex], low[child]);
+                continue;
+            }
+            dfs(child, vertex, timer, low, visited, graph, cnt, ans);
+            low[vertex] = min(low[vertex], low[child]);
+            if(low[child] > timer[vertex]){
+                ans.push_back({child, vertex});
+            }
+        }
+    }
+
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& v) {
+        vector<vector<int>> graph(n);
+        for(auto it : v){
+            graph[it[0]].push_back(it[1]);
+            graph[it[1]].push_back(it[0]);
+        }
+        vector<int> timer(n, -1), low(n, -1);
+
+        vector<bool> visited(n, false);
+
+        vector<vector<int>> ans;
+        for(int i = 0; i < n; i++){
+            if(!visited[i]){
+                int cnt = 0;
+                dfs(i, -1, timer, low, visited, graph, cnt, ans);
+            }
+        }
+        return ans;
+    }
+};
