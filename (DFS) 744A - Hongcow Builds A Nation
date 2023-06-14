@@ -1,0 +1,55 @@
+https://codeforces.com/problemset/problem/744/A
+
+int dfs(int vertex, vector<vector<int>> &graph, vector<bool> &visited){
+    visited[vertex] = true;
+    int cnt = 1;
+    for(auto child : graph[vertex]){
+        if(!visited[child]){
+            cnt += dfs(child, graph, visited);
+        }
+    }
+    return cnt;
+}
+ 
+//------------------------------------code------------------------------------//
+ 
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    ll T = 1;
+    // cin >> T;
+    while(T--){
+        int n, m, k; cin >> n >> m >> k;
+        vector<int> special(k);
+        for(int i = 0; i < k; i++){
+            cin >> special[i];
+        }
+        vector<vector<int>> graph(n + 1);
+        for(int i = 0; i < m; i++){
+            int u, v; cin >> u >> v;
+            graph[u].push_back(v);
+            graph[v].push_back(u);
+        }
+        int how = 0;
+        vector<bool> visited(n + 1, false);
+        vector<int> store;
+        for(int i = 0; i < k; i++){
+            int ketla = dfs(special[i], graph, visited);
+            how += ketla;
+            store.push_back(ketla);
+        }
+        // c(how);
+        int rem = n - how;
+        // c(rem);
+        int add = 0;
+        sort(store.begin(), store.end());
+        store.back() += rem;
+        // cv(store);
+        for(int i = 0; i < store.size(); i++){
+            add += (store[i] * (store[i] - 1)) / 2;
+        }
+        cout << (add - m) << endl;
+        sahil:; 
+    }
+    return 0;
+}
