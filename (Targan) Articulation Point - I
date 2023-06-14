@@ -1,0 +1,63 @@
+class Solution {
+  public:
+  
+    void dfs(int vertex, int parent, vector<bool> &visited, vector<int> &timer, vector<int> &low,
+             int cnt, vector<int> adj[], set<int> &ms){
+        
+        visited[vertex] = true;
+        timer[vertex] = cnt;
+        low[vertex] = cnt; 
+        cnt++;
+        
+        int ch = 0;
+        
+        for(auto child : adj[vertex]){
+            if(child == parent){
+                continue;
+            }
+            if(visited[child]){
+                low[vertex] = min(low[vertex], timer[child]);
+                continue;
+            }
+            dfs(child, vertex, visited, timer, low, cnt, adj, ms);
+            low[vertex] = min(low[vertex], low[child]);
+            if(low[child] >= timer[vertex] && parent != -1){
+                ms.insert(vertex);
+            }
+            ch++;
+        }
+        if(parent == -1 && ch > 1){
+            ms.insert(vertex);
+        }
+    }
+    
+    vector<int> articulationPoints(int V, vector<int>adj[]) {
+        
+        int n = V;
+        
+        vector<bool> visited(n, false);
+        
+        vector<int> timer(n, -1), low(n, -1);
+        
+        set<int> ms;
+        
+        for(int i = 0; i < n; i++){
+            if(!visited[i]){
+                int cnt = 0;
+                dfs(i, -1, visited, timer, low, cnt, adj, ms);
+            }
+        }
+        
+        vector<int> ans;
+        
+        for(auto it = ms.begin(); it != ms.end(); it++){
+            ans.push_back(*it);    
+        }
+        
+        if(ans.size()){
+            return ans;
+        }else{
+            return {-1};
+        }
+    }
+};
