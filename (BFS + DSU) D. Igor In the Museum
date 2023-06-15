@@ -1,0 +1,115 @@
+https://codeforces.com/problemset/problem/598/D
+
+template<typename T>
+class dsu{
+    public:
+        vector<T> par, sz;
+        ll n;
+        
+        dsu(ll x){
+            n = x;
+            par.resize(n + 1);
+            sz.resize(n + 1);
+            fori(i, 0, n + 1){
+                par[i] = i;
+                sz[i] = 1;
+            }
+        }
+
+        T getp(T x){
+            while(par[x] != x){
+                par[x] = par[par[x]];
+                x = par[x];
+            }
+            return x;
+        }
+
+        void merge(T a, T b){
+            T p1 = getp(a), p2 = getp(b);
+            if(p1 == p2){
+                return;
+            }
+            if(sz[p2] > sz[p1]){
+                swap(p1, p2);
+            }
+            par[p2] = p1;
+            sz[p1] += sz[p2];
+            sz[p2] = 0;
+        }
+};
+ 
+//------------------------------------code------------------------------------//
+ 
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    ll T = 1;
+    // cin >> T;
+    while(T--){
+        ll n, m, k; cin >> n >> m >> k;
+
+        vector<vector<char>> graph(n, vector<char> (m));
+
+        for(ll i = 0; i < n; i++){
+            for(ll j = 0; j < m; j++){
+                cin >> graph[i][j];
+                // cout << graph[i][j];
+            }
+            // cout << endl;
+        }
+
+        vector<pair<ll, ll>> movement = {
+            {0, 1}, {0, -1}, {1, 0}, {-1, 0}  
+        };
+
+        vector<vector<bool>> visited(n, vector<bool> (m, false));
+
+        map<ll, ll> hash;
+
+        dsu<ll> obj(n * m);
+
+        for(ll i = 0; i < n; i++){
+            for(ll j = 0; j < m; j++){
+                if(!visited[i][j] && graph[i][j] == '.'){
+                    queue<pair<ll, ll>> Q;
+                    Q.push({i, j});
+                    ll edges = 0, node = 0;
+                    visited[i][j] = true;
+                    
+                    while(!Q.empty()){
+                        node++;
+                        auto f = Q.front();
+                        Q.pop();
+                        ll x = f.first, y = f.second;
+
+                        for(auto k : movement){
+                            ll xx = x + k.first;
+                            ll yy = y + k.second;
+                            if(xx >= 0 && xx < n && yy >= 0 && yy < m && graph[xx][yy] == '.'){
+                                if(!visited[xx][yy]){  
+                                    ll u = m * x + y, v = m * xx + yy;
+                                    obj.merge(u, v);  
+                                    Q.push({xx, yy});
+                                    visited[xx][yy] = true;
+                                }
+                                edges++;
+                            }
+                        }
+                    }
+                    ll a = i * m + j;
+                    hash[obj.getp(a)] = (node * 4) - edges;
+                    // cs(i), cs(j), cs(node), c(edges);
+                }
+            }
+        }
+
+        while(k--){
+            ll u, v; cin >> u >> v;
+            u--; v--;
+            ll a = u * m + v;
+            cout << hash[obj.getp(a)] << endl;
+        }
+        sahil:; 
+    }
+    return 0;
+}
