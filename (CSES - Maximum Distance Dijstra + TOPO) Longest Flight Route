@@ -1,0 +1,61 @@
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    ll T = 1;
+    // cin >> T;
+    while(T--){
+        int n, m; cin >> n >> m;
+ 
+        vector<vector<int>> graph(n + 1);
+ 
+        for(int i = 0; i < m; i++){
+            int u, v; cin >> u >> v;
+            graph[u].push_back(v);
+        }
+ 
+        stack<pair<int, int>> Q;
+        Q.push({1, 1});
+ 
+        vector<int> par(n + 1, -1);
+        par[1] = 1;
+ 
+        vector<int> dist(n + 1, -1);
+        dist[1] = 1;
+ 
+        while(!Q.empty()){
+            auto f = Q.top();
+            Q.pop();
+            int node = f.first, d = f.second;
+            for(auto child : graph[node]){
+                if(d + 1 > dist[child]){
+                    dist[child] = d + 1;
+                    Q.push({child, dist[child]});
+                    par[child] = node;
+                }
+            }
+        }
+ 
+        if(dist[n] == -1){
+            cout << "IMPOSSIBLE" << endl;
+            continue;
+        }
+ 
+        vector<int> ans;
+ 
+        while(par[n] != n){
+            ans.push_back(n);
+            n = par[n];
+        }
+ 
+        ans.push_back(1);
+ 
+        reverse(ans.begin(), ans.end());
+ 
+        cout << ans.size() << endl;
+ 
+        cv(ans);
+ 
+        sahil:; 
+    }
+    return 0;
+}
