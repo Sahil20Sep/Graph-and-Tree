@@ -1,0 +1,166 @@
+bool dfs(int vertex, vector<vector<int>> &graph, vector<bool> &visited, stack<int> &st, vector<bool> &path){
+    visited[vertex] = true;
+    path[vertex] = true;
+    for(auto child : graph[vertex]){
+        if(visited[child]){
+            if(path[child]){
+                return true;
+            }else{
+                continue;
+            }
+        }
+        if(dfs(child, graph, visited, st, path)){
+            return true;
+        }
+    }
+    st.push(vertex);
+    path[vertex] = false;
+    return false;
+}
+ 
+//------------------------------------code------------------------------------//
+ 
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    ll T = 1;
+    // cin >> T;
+    while(T--){
+        int n; cin >> n;
+ 
+        vector<string> v(n);
+ 
+        for(int i = 0; i < n; i++){
+            cin >> v[i];
+        }
+ 
+        vector<vector<int>> graph(26);
+ 
+        bool ok = false;
+ 
+        for(int i = 0; i < n - 1; i++){
+            string a = v[i];
+            string b = v[i + 1];
+            bool flag = false;
+            for(int j = 0; j < min(a.size(), b.size()); j++){
+                if(a[j] != b[j]){
+                    flag = true;
+                    graph[a[j] - 'a'].push_back(b[j] - 'a');
+                    break;
+                }
+            }
+            if(flag == false && a.size() > b.size()){
+                ok = true;
+                break;
+            }
+        }
+ 
+        if(ok){
+            cout << "Impossible" << endl;
+            continue;
+        }
+ 
+        vector<bool> visited(26, false);
+ 
+        stack<int> st;
+ 
+        vector<bool> path(26, false);
+ 
+        for(int i = 0; i < 26; i++){
+            if(!visited[i]){
+                dfs(i, graph, visited, st, path);
+            }
+        }
+ 
+        if(st.size() != 26){
+            cout << "Impossible" << endl;
+            continue;
+        }
+ 
+        while(!st.empty()){
+            auto f = st.top();
+            st.pop();
+            cout << char(f + 'a');
+        }
+ 
+        cout << endl;
+ 
+        sahil:; 
+    }
+    return 0;
+}
+-----------------------------------------------------------------------------
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    ll T = 1;
+    // cin >> T;
+    while(T--){
+        int n; cin >> n;
+ 
+        vector<string> v(n);
+ 
+        for(int i = 0; i < n; i++){
+            cin >> v[i];
+        }
+ 
+        vector<vector<int>> graph(26);
+ 
+        vector<int> in(26, 0);
+ 
+        bool ok = false;
+ 
+        for(int i = 0; i < n - 1; i++){
+            string a = v[i];
+            string b = v[i + 1];
+            bool flag = false;
+            for(int j = 0; j < min(a.size(), b.size()); j++){
+                if(a[j] != b[j]){
+                    flag = true;
+                    graph[a[j] - 'a'].push_back(b[j] - 'a');
+                    in[b[j] - 'a']++;
+                    break;
+                }
+            }
+            if(flag == false && a.size() > b.size()){
+                ok = true;
+                break;
+            }
+        }
+ 
+        if(ok){
+            cout << "Impossible" << endl;
+            continue;
+        }
+ 
+        queue<int> Q;
+ 
+        for(int i = 0; i < 26; i++){
+            if(!in[i]){
+                Q.push(i);
+            }
+        }
+ 
+        string final = "";
+ 
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+            final.push_back(char(f + 'a'));
+            for(auto child : graph[f]){
+                in[child]--;
+                if(!in[child]){
+                    Q.push(child);
+                }
+            }
+        }
+        
+        final.size() == 26 ? c(final) : c("Impossible");
+ 
+        cout << endl;
+ 
+        sahil:; 
+    }
+    return 0;
+}
