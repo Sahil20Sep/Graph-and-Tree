@@ -1,0 +1,123 @@
+class Solution {
+public:
+
+    vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges) {
+
+        vector<vector<int>> graph(n);
+
+        vector<int> in(n, 0);
+
+        for(auto it : edges){
+            int u = it[0], v = it[1];
+            graph[u].push_back(v);
+            graph[v].push_back(u);
+            
+            in[u]++; in[v]++;
+        }
+
+        queue<int> Q;
+
+        for(int i = 0; i < n; i++){
+            if(in[i] == 1){
+                Q.push(i);
+            }
+        }
+
+        vector<int> ans;
+
+        while(!Q.empty()){
+            int s= Q.size();
+            ans.clear();
+            for(int i = 0; i < s; i++){
+                auto f = Q.front();
+                Q.pop();
+
+                ans.push_back(f);
+
+                for(auto child : graph[f]){
+                    in[child]--;
+                    if(in[child] == 1){
+                        Q.push(child);
+                    }
+                }
+            }
+        }
+
+        if(n == 1){
+            return {0};
+        }
+
+        return ans;
+
+    }
+};
+
+--------------------------------------------------------
+
+class Solution {
+public:
+
+    vector<int> bfs(int vertex, vector<vector<int>> &graph){
+        int n = graph.size();
+
+        vector<int> dist(n, 1e9);
+
+        dist[vertex] = 0;
+
+        queue<pair<int, int>> Q;
+        Q.push({vertex, 0});
+
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+            int node = f.first, d = f.second;
+            for(auto child : graph[node]){
+                if(d + 1 < dist[child]){
+                    dist[child] = d + 1;
+                    Q.push({child, dist[child]});
+                }
+            }
+        }
+
+        return dist;
+    }
+
+    vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges) {
+        vector<vector<int>> graph(n);
+
+        for(auto it : edges){
+            int u = it[0], v = it[1];
+            graph[u].push_back(v);
+            graph[v].push_back(u);
+        }
+
+        auto one = bfs(0, graph);
+
+        int mx1 = max_element(one.begin(), one.end()) - one.begin();
+
+        auto two = bfs(mx1, graph);
+
+        int mx2 = max_element(two.begin(), two.end()) - two.begin();
+
+        auto three = bfs(mx2, graph);
+
+        int ans = 1e9;
+
+        vector<int> ms;
+
+        for(int i = 0; i < n; i++){
+            int mx = max(two[i], three[i]);
+            if(mx == ans){
+                ms.push_back(i);
+            }
+            if(mx < ans){
+                ms.clear();
+                ms.push_back(i);
+                ans = mx;
+            }
+        }
+
+        return ms;
+
+    }
+};
