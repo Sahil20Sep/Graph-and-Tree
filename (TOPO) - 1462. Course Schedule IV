@@ -1,0 +1,51 @@
+class Solution {
+public:
+    vector<bool> checkIfPrerequisite(int n, vector<vector<int>>& v, vector<vector<int>>& q) {
+        vector<vector<int>> graph(n);
+
+        vector<int> in(n, 0);
+
+        for(auto it : v){
+            graph[it[0]].push_back(it[1]);
+            in[it[1]]++;
+        }
+
+        queue<int> Q;
+
+        for(int i = 0; i < n; i++){
+            if(!in[i]){
+                Q.push(i);
+            }
+        }
+
+        vector<unordered_set<int>> ms(n);
+
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+            for(auto child : graph[f]){
+                in[child]--;
+                if(!in[child]){
+                    Q.push(child);
+                }
+                for(auto it = ms[f].begin(); it != ms[f].end(); it++){
+                    ms[child].insert(*it);
+                }
+                ms[child].insert(f);
+            }
+        }
+
+        vector<bool> ans;
+
+        for(auto it : q){
+            int u = it[0], v = it[1];
+            if(ms[v].count(u)){
+                ans.push_back(true);
+            }else{
+                ans.push_back(false);
+            }
+        }
+
+        return ans;
+    }
+};
