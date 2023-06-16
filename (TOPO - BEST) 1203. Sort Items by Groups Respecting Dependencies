@@ -1,0 +1,102 @@
+class Solution {
+public:
+    vector<int> sortItems(int n, int m, vector<int>& group, vector<vector<int>>& v) {
+
+        for(int i = 0; i < n; i++){
+            if(group[i] == -1){
+                group[i] = m;
+                m++;
+            }
+        }
+
+        vector<unordered_set<int>> graph_group(m), graph_node(n);
+
+        vector<int> in_group(m), in_node(n);
+
+        for(int node = 0; node < n; node++){
+
+            int node_group = group[node];
+
+            for(auto child : v[node]){
+                int child_group = group[child];
+                
+                if(child_group != node_group && !graph_group[child_group].count(node_group)){
+                    graph_group[child_group].insert(node_group);
+                    in_group[node_group]++;
+                }
+
+                in_node[node]++;
+                graph_node[child].insert(node);
+            }
+        }
+
+        vector<int> order_node;
+
+        queue<int> Q;
+
+        for(int i = 0; i < n; i++){
+            if(!in_node[i]){
+                Q.push(i);
+            }
+        }
+
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+            order_node.push_back(f);
+
+            for(auto child : graph_node[f]){
+                in_node[child]--;
+                if(!in_node[child]){
+                    Q.push(child);
+                }
+            }
+        }
+
+        if(order_node.size() != n){
+            return {};
+        }
+
+        vector<int> order_group;
+
+        for(int i = 0; i < m; i++){
+            if(!in_group[i]){
+                Q.push(i);
+            }
+        }
+
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+            order_group.push_back(f);
+
+            for(auto child : graph_group[f]){
+                in_group[child]--;
+                if(!in_group[child]){
+                    Q.push(child);
+                }
+            }
+        }
+
+        if(order_group.size() != m){
+            return {};
+        }
+
+        vector<vector<int>> store(m);
+
+        for(auto it : order_node){
+            store[group[it]].push_back(it);
+        }
+
+        vector<int> ans;
+
+        for(auto it : order_group){
+            for(auto i : store[it]){
+                ans.push_back(i);
+            }
+        }
+
+
+        return ans;
+    }
+};
