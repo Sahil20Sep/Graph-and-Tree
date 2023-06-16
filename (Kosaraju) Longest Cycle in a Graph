@@ -1,0 +1,78 @@
+class Solution {
+public:
+
+    void dfs1(int vertex, vector<vector<int>> &graph, vector<bool> &visited, stack<int> &st){
+        visited[vertex] = true;
+        for(auto child : graph[vertex]){
+            if(!visited[child]){
+                dfs1(child, graph, visited, st);
+            }
+        }
+        st.push(vertex);
+    }
+
+    int dfs2(int vertex, vector<vector<int>> &graph, vector<bool> &visited){
+        visited[vertex] = true;
+        int cnt = 1;
+        for(auto child : graph[vertex]){
+            if(!visited[child]){
+                cnt += dfs2(child, graph, visited);
+            }
+        }
+        return cnt;
+    }
+
+    int longestCycle(vector<int>& edges) {
+
+        int n = edges.size();
+        
+        vector<vector<int>> graph(n);
+
+        for(int i = 0; i < n; i++){
+            if(edges[i] == -1){
+                continue;
+            }
+            graph[i].push_back(edges[i]);
+        }
+
+        stack<int> st;
+
+        vector<bool> visited(n, false);
+
+        for(int i = 0; i < n; i++){
+            if(!visited[i]){
+                dfs1(i, graph, visited, st);
+            }
+        }
+
+        vector<vector<int>> temp(n);
+
+        for(int i = 0; i < n; i++){
+            visited[i] = false;
+            if(edges[i] == -1){
+                continue;
+            }
+            temp[edges[i]].push_back(i);
+        }
+
+        int ans = -1;
+
+        while(!st.empty()){
+            auto f = st.top();
+            st.pop();
+            if(!visited[f]){
+                int cycle = dfs2(f, temp, visited);
+                if(cycle >= 2){
+                    ans = max(ans, cycle);
+                }
+            }
+        }
+
+        temp.clear();
+        graph.clear();
+        visited.clear();
+
+        return ans;
+
+    }
+};
