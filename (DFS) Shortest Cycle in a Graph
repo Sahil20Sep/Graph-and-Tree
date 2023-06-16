@@ -1,0 +1,50 @@
+class Solution {
+public:
+
+    void dfs(int vertex, int par, int cnt, vector<vector<int>> &graph, vector<bool> &visited, vector<int> &timer, vector<int> &mn){
+        visited[vertex] = true;
+        timer[vertex] = cnt;
+        for(auto child : graph[vertex]){
+            if(child == par){
+                continue;
+            }
+            if(visited[child]){
+                mn.push_back(abs(timer[child] - timer[vertex]));
+                if(timer[child] > cnt + 1){
+                    timer[child] = cnt + 1;
+                }
+                continue;
+            }
+            dfs(child, vertex, cnt + 1, graph, visited, timer, mn);
+        }
+    }
+
+    int findShortestCycle(int n, vector<vector<int>>& edges) {
+        
+        vector<vector<int>> graph(n);
+
+        for(auto it : edges){
+            auto u = it[0], v = it[1];
+            graph[u].push_back(v);
+            graph[v].push_back(u);
+        }
+
+        vector<int> mn;
+
+        for(int i = 0; i < n; i++){
+            vector<bool> visited(n, false);
+            vector<int> timer(n, 0);
+            dfs(i, -1, 0, graph, visited, timer, mn);
+            visited.clear();
+            timer.clear();
+        }
+
+        graph.clear();
+
+        if(mn.empty()){
+            return -1;
+        }
+
+        return *min_element(mn.begin(), mn.end()) + 1;
+    }
+};
