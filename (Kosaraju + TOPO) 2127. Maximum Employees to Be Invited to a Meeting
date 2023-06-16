@@ -1,0 +1,111 @@
+class Solution {
+public:
+
+    void dfs1(int vertex, vector<vector<int>> &graph, vector<bool> &visited, stack<int> &st){
+        visited[vertex] = true;
+        for(auto child : graph[vertex]){
+            if(!visited[child]){
+                dfs1(child, graph, visited, st);
+            }
+        }
+        st.push(vertex);
+    }
+
+    int dfs2(int vertex, vector<vector<int>> &graph, vector<bool> &visited, vector<int> &store){
+        visited[vertex] = true;
+        int cnt = 1;
+        store.push_back(vertex);
+        for(auto child : graph[vertex]){
+            if(!visited[child]){
+                cnt += dfs2(child, graph, visited, store);
+            }
+        }
+        return cnt;
+    }
+
+    int bfs(int node, int par, vector<vector<int>> &graph){
+        
+        queue<int> Q;
+        Q.push(node);
+
+        vector<int> visited(graph.size(), false);
+
+        int cnt = 0;
+
+        while(!Q.empty()){
+            int s = Q.size();
+            while(s--){
+                auto f = Q.front();
+                Q.pop();
+                for(auto child : graph[f]){
+                    if(child == par){
+                        continue;
+                    }
+                    if(!visited[child]){
+                        visited[child] = true;
+                        Q.push(child);
+                    }
+                }
+            }
+            cnt++;
+        }
+        
+        return cnt;
+    }
+
+    int maximumInvitations(vector<int>& f) {
+        
+        int n = f.size();
+
+        if(n <= 3){
+            return n;
+        }
+
+        vector<vector<int>> graph(n);
+
+        for(int i = 0; i < n; i++){
+            graph[i].push_back(f[i]);
+        }
+
+        vector<bool> visited(n, false);
+
+        stack<int> st;
+
+        for(int i = 0; i < n; i++){
+            if(!visited[i]){
+                dfs1(i, graph, visited, st);
+            }
+        }
+
+        vector<vector<int>> adj(n);
+
+        for(int i = 0; i < n; i++){
+            visited[i] = false;
+            adj[f[i]].push_back(i);
+        }
+
+        int ans = 0;
+
+        int sum = 0;
+        
+        while(!st.empty()){
+            auto ff = st.top();
+            st.pop();
+            vector<int> store;
+            if(!visited[ff]){
+                int cycle = dfs2(ff, adj, visited, store);
+                if(cycle == 2){
+                    sum += bfs(store[0], store[1], adj);
+                    sum += bfs(store[1], store[0], adj);
+                    ans = max(ans, sum);
+                }
+                if(cycle > 2){
+                    ans = max(ans, cycle);
+                }
+            }
+        }
+
+        return ans;
+
+    }
+};
