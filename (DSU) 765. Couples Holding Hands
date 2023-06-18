@@ -1,0 +1,83 @@
+template<typename T>
+class dsu{
+    public:
+        vector<T> par, sz, rank;
+        int n;
+        
+        dsu(int x){
+            n = x;
+            par.resize(n);
+            sz.resize(n);
+            rank.resize(n);
+            for(int i = 0; i < n; i++){
+                par[i] = i;
+                sz[i] = 1;
+                rank[i] = 0;
+            }
+        }
+
+        T getp(T x){
+            while(par[x] != x){
+                par[x] = par[par[x]];
+                x = par[x];
+            }
+            return x;
+        }
+
+        void r(T a, T b){
+            T p1 = getp(a), p2 = getp(b);
+            if(p1 == p2){
+                return;
+            }
+            if(rank[p1] == rank[p2]){
+                rank[p1]++;
+                par[p2] = p1;
+            }else{
+                if(rank[p1] < rank[p2]){
+                    par[p1] = p2;
+                }else{
+                    par[p2] = p1;
+                }
+            }
+        }
+
+        void merge(T a, T b){
+            T p1 = getp(a), p2 = getp(b);
+            if(p1 == p2){
+                return;
+            }
+            if(sz[p2] > sz[p1]){
+                swap(p1, p2);
+            }
+            par[p2] = p1;
+            sz[p1] += sz[p2];
+            sz[p2] = 0;
+        }
+};
+
+
+class Solution {
+public:
+    int minSwapsCouples(vector<int>& row) {
+        
+        int n = row.size();
+
+        dsu<int> obj(n);
+
+        for(int i = 0; i < n; i += 2){
+            obj.merge(i, i + 1);
+        }
+
+        int ans = 0;
+
+        for(int i = 0; i < n; i += 2){
+            if(obj.getp(row[i]) != obj.getp(row[i + 1])){
+                obj.merge(row[i], row[i + 1]);
+                ans++;
+            }
+        }
+
+        return ans;
+
+    }
+};
