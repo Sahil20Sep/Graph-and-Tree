@@ -1,0 +1,179 @@
+class Solution {
+public:
+
+    void dfs1(int vertex, vector<vector<int>> &graph, vector<bool> &visited, stack<int> &st){
+        visited[vertex] = true;
+        for(auto child : graph[vertex]){
+            if(!visited[child]){
+                dfs1(child, graph, visited, st);
+            }
+        }
+        st.push(vertex);
+    }
+
+    int dfs2(int vertex, vector<vector<int>> &graph, vector<bool> &visited, vector<int> &store_cycle){
+        visited[vertex] = true;
+        int cnt = 1;
+        store_cycle.push_back(vertex);
+        for(auto child : graph[vertex]){
+            if(!visited[child]){
+                cnt += dfs2(child, graph, visited, store_cycle);
+            }
+        }
+        return cnt;
+    }
+
+    vector<int> findRedundantDirectedConnection(vector<vector<int>>& edges) {
+        
+        int n = edges.size();
+
+        vector<vector<int>> graph(n + 1);
+
+        vector<int> in(n + 1, 0);
+
+        map<int, int> last_edge;
+
+        for(int i = 0; i < n; i++){
+            int u = edges[i][0], v = edges[i][1];
+            graph[u].push_back(v);
+            in[v]++;
+            last_edge[v] = i;
+        }
+
+        vector<vector<int>> temp(n + 1);
+
+        for(int i = 0; i < n; i++){
+            int u = edges[i][0], v = edges[i][1];
+            temp[v].push_back(u);
+        }
+
+        bool flag = true;
+
+        int store = -1;
+
+        for(int i = 1; i <= n; i++){
+            if(in[i] == 2){
+                store = i;
+            }
+            if(in[i] != 1){
+                flag = false;
+            }
+        }
+
+        if(flag){
+            
+            stack<int> st;
+
+            vector<bool> visited(n + 1, false);
+
+            for(int i = 1; i <= n; i++){
+                if(!visited[i]){
+                    dfs1(i, graph, visited, st);
+                }
+            }
+
+            vector<int> store_cycle;
+
+            visited.assign(n + 1, false);
+
+            while(!st.empty()){
+                auto f = st.top();
+                st.pop();
+
+                if(!visited[f]){
+                    int cycle = dfs2(f, temp, visited, store_cycle);
+                    if(cycle > 1){
+                        break;
+                    }
+                    store_cycle.clear();
+                }
+            }
+
+            int id = -1;
+
+            for(auto it : store_cycle){
+                id = max(id, last_edge[it]);
+            }
+
+            return edges[id];
+
+        }
+
+        vector<int> child;
+
+        for(auto it : temp[store]){
+            child.push_back(it);
+        }
+
+        vector<pair<int, int>> not_correct, cc;
+
+        for(auto it : child){
+
+            // cout << it << endl;
+            
+            vector<vector<int>> mark = graph;
+
+            auto s = mark[it];
+
+            mark[it].clear();
+
+            for(auto i : s){
+                if(i != store){
+                    mark[it].push_back(i);
+                }
+            }
+
+            stack<int> st;
+
+            vector<bool> visited(n + 1, false);
+
+            for(int i = 1; i <= n; i++){
+                if(!visited[i]){
+                    dfs1(i, mark, visited, st);
+                }
+            }
+
+            vector<vector<int>> temp1 = temp;
+
+            temp1[store].clear();
+
+            for(auto i : temp[store]){
+                if(i != it){
+                    temp1[store].push_back(i);
+                }
+            }
+
+            vector<int> store_cycle;
+
+            visited.assign(n + 1, false);
+
+            bool ok = true;
+
+            while(!st.empty()){
+                auto f = st.top();
+                st.pop();
+
+                if(!visited[f]){
+                    int cycle = dfs2(f, temp1, visited, store_cycle);
+                    if(cycle > 1){
+                        ok = false;
+                        not_correct.push_back({it, store});
+                        break;
+                    }
+                }
+            }
+
+            if(ok){
+                cc.push_back({it, store});
+            }
+        }
+
+        if(not_correct.size() > 0){
+            auto a = cc[0].first, b = cc[0].second;
+            return {a, b};
+        }
+
+        return edges[last_edge[store]];
+
+    }
+};
