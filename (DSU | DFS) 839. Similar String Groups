@@ -70,3 +70,48 @@ public:
 
     }
 };
+
+-----------------------------------------------------------------------
+
+class Solution {
+public:
+
+    bool func(int i, int j, vector<string> &v){
+        string s = v[i], t = v[j];
+        int cnt = 0;
+        for(int k = 0; k < s.size(); k++){
+            if(s[k] != t[k]){
+                cnt++;
+            }
+        }
+        return (cnt == 0 || cnt == 2);
+    }
+
+    void dfs(int vertex, vector<bool> &visited, vector<string> &v){
+        visited[vertex] = true;
+        for(int i = 0; i < v.size(); i++){
+            if(!visited[i] && func(vertex, i, v)){
+                dfs(i, visited, v);
+            }
+        }
+    }
+
+    int numSimilarGroups(vector<string>& v) {
+
+        int n = v.size();
+        
+        vector<bool> visited(n, false);
+
+        int cnt = 0;
+
+        for(int i = 0; i < n; i++){
+            if(!visited[i]){
+                dfs(i, visited, v);
+                cnt++;
+            }
+        }
+
+        return cnt;
+
+    }
+};
