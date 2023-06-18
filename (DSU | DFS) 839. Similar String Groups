@@ -1,0 +1,72 @@
+template <typename T>
+class dsu{
+    public:
+        vector<T> par, sz;
+        int n;
+
+        dsu(int x){
+            n = x;
+            par.resize(n + 1);
+            sz.resize(n + 1);
+            for(int i = 0; i < n; i++){
+                par[i] = i;
+                sz[i] = 1;
+            }
+        }
+
+        T getp(T a){
+            while(par[a] != a){
+                par[a] = par[par[a]];
+                a = par[a];
+            }
+            return a;
+        }
+
+        void merge(T p1, T p2){
+            T a = getp(p1), b = getp(p2);
+            if(a == b){
+                return;
+            }
+            if(sz[a] < sz[b]){
+                swap(a, b);
+            }
+            par[b] = a;
+            sz[a] += sz[b];
+            sz[b] = 0;         
+        }
+};
+
+
+class Solution {
+public:
+    int numSimilarGroups(vector<string>& v) {
+
+        int n = v.size();
+        
+        dsu<int> obj(n);
+
+        for(int i = 0; i < n - 1; i++){
+            for(int j = i + 1; j < n; j++){
+                string s = v[i], t = v[j];
+                int cnt = 0;
+                for(int k = 0; k < s.size(); k++){
+                    if(v[i][k] != v[j][k]){
+                        cnt++;
+                    }
+                }
+                if(cnt == 2 || cnt == 0){
+                    obj.merge(i, j);
+                }
+            }
+        }
+
+        set<int> ms;
+
+        for(int i = 0; i < n; i++){
+            ms.insert(obj.getp(i));
+        }
+
+        return (int)ms.size();
+
+    }
+};
