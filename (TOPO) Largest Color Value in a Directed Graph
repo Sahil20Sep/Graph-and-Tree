@@ -1,0 +1,60 @@
+class Solution {
+public:
+    int largestPathValue(string s, vector<vector<int>>& edges) {
+        
+        int n = s.size();
+
+        vector<vector<int>> graph(n);
+
+        vector<int> in(n, 0);
+
+        for(auto it : edges){
+            graph[it[0]].push_back(it[1]);
+            in[it[1]]++;
+        }
+
+        queue<int> Q;
+
+        int ans = 0;
+
+        vector<int> visited(n, false);
+
+        vector<vector<int>> store(n, vector<int> (26, 0));
+
+        for(int i = 0; i < n; i++){
+            store[i][s[i] - 'a']++;
+            ans = max(ans, store[i][s[i] - 'a']);
+            if(!in[i]){
+                Q.push(i);
+            }
+        }
+
+        int cnt = 0;
+
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+            cnt++;
+
+            for(auto child : graph[f]){
+
+                for(int i = 0; i < 26; i++){
+                    store[child][i] = max(store[child][i], store[f][i] + (i == s[child] - 'a'));
+                    ans = max(ans, store[child][i]);
+                }
+                
+                in[child]--;
+                if(!in[child]){
+                    Q.push(child);
+                }
+            }
+        }
+
+        if(cnt != n){
+            return -1;
+        }
+
+        return ans;
+
+    }
+};
