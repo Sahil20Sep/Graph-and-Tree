@@ -1,0 +1,52 @@
+class Solution {
+public:
+
+    int maxi = 0;
+
+    int dfs(int vertex, int parent, vector<vector<int>> &graph, string &s){
+        int ans = 1;
+        vector<int> store;
+        
+        for(auto child : graph[vertex]){
+            if(child == parent){
+                continue;
+            }
+            int current = dfs(child, vertex, graph, s);
+            if(s[vertex] == s[child]){
+                current = 1;
+            }else{
+                current++;
+            }
+            ans = max(ans, current);
+            store.push_back(current);
+        }
+
+        int sz = store.size();
+
+        if(sz >= 2){
+            sort(store.begin(), store.end());
+            maxi = max(maxi, store[sz - 1] + store[sz - 2] - 1);
+        }
+
+        maxi = max(maxi, ans);
+
+        return ans;
+
+    }
+
+    int longestPath(vector<int>& parent, string s) {
+        int n = s.size();
+
+        vector<vector<int>> graph(n);
+
+        for(int i = 1; i < n; i++){
+            int u = i, v = parent[i];
+            graph[u].push_back(v);
+            graph[v].push_back(u);
+        }
+
+        dfs(0, -1, graph, s);
+
+        return maxi;
+    }
+};
