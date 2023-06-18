@@ -1,0 +1,51 @@
+class Solution {
+public:
+    vector<string> findAllRecipes(vector<string>& recipes, vector<vector<string>>& ingredients, vector<string>& supplies) {
+        
+        unordered_map<string, vector<string>> graph;
+
+        unordered_map<string, int> in;
+
+        for(int i = 0; i < recipes.size(); i++){
+            for(int j = 0; j < ingredients[i].size(); j++){
+                graph[ingredients[i][j]].push_back(recipes[i]);
+                in[recipes[i]]++;
+            }
+        }
+
+        queue<string> Q;
+
+        for(int i = 0; i < supplies.size(); i++){
+            Q.push(supplies[i]);
+        }
+
+        set<string> ms(recipes.begin(), recipes.end());
+
+        vector<string> ans;
+
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+
+            ans.push_back(f);
+
+            for(auto child : graph[f]){
+                in[child]--;
+                if(!in[child]){
+                    Q.push(child);
+                }
+            }
+        }
+
+        vector<string> final;
+
+        for(auto it : ans){ 
+            if(ms.find(it) != ms.end()){
+                final.push_back(it);
+            }
+        }
+
+        return final;
+
+    }
+};
