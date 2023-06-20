@@ -883,3 +883,44 @@ vector<int> getTopView(TreeNode<int> *root) {
 }
 
 -------------------------------------------------------------------------------------------------------------
+
+            (Bottam view) - small change in above code
+
+vector<int> bottomView(BinaryTreeNode<int> * root){
+
+    if(root == NULL){
+        return {};
+    }
+    
+    queue<pair<BinaryTreeNode<int>*, int>> Q;
+    Q.push({root, 0});
+
+    map<int, int> hash;
+
+    while(!Q.empty()){
+        auto f = Q.front();
+        Q.pop();
+
+        auto vertex = f.first;
+        auto vertical = f.second;
+
+        hash[vertical] = (vertex -> data);
+
+        if(vertex -> left != NULL){
+            Q.push({vertex -> left, vertical - 1});
+        }
+
+        if(vertex -> right != NULL){
+            Q.push({vertex -> right, vertical + 1});
+        }
+    }
+
+    vector<int> store;
+
+    for(auto i : hash){
+        store.push_back(i.second);
+    }
+
+    return store;
+    
+}
