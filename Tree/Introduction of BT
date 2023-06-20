@@ -848,37 +848,38 @@ vector<int> getTopView(TreeNode<int> *root) {
         return {};
     }
     
-    queue<pair<TreeNode<int>*, pair<int, int>>> Q;
-    Q.push({root, {0, 0}});
+    queue<pair<TreeNode<int>*, int>> Q;
+    Q.push({root, 0});
 
-    map<int, vector<int>> hash;
+    map<int, int> hash;
 
     while(!Q.empty()){
         auto f = Q.front();
         Q.pop();
 
         auto vertex = f.first;
-        auto vertical = f.second.first, level = f.second.second;
+        auto vertical = f.second;
 
-        hash[vertical].push_back(vertex -> val);
+        if(hash.find(vertical) == hash.end()){
+            hash[vertical] = (vertex -> val);
+        }
 
         if(vertex -> left != NULL){
-            Q.push({vertex -> left, {vertical - 1, level + 1}});
+            Q.push({vertex -> left, vertical - 1});
         }
 
         if(vertex -> right != NULL){
-            Q.push({vertex -> right, {vertical + 1, level + 1}});
+            Q.push({vertex -> right, vertical + 1});
         }
     }
 
     vector<int> store;
 
     for(auto i : hash){
-        for(auto j : i.second){
-            store.push_back(j);
-            break;
-        }
+        store.push_back(i.second);
     }
 
     return store;
 }
+
+-------------------------------------------------------------------------------------------------------------
