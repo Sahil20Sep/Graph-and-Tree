@@ -851,7 +851,7 @@ vector<int> getTopView(TreeNode<int> *root) {
     queue<pair<TreeNode<int>*, pair<int, int>>> Q;
     Q.push({root, {0, 0}});
 
-    map<int, map<int, multiset<int>>> hash;
+    map<int, vector<int>> hash;
 
     while(!Q.empty()){
         auto f = Q.front();
@@ -860,7 +860,7 @@ vector<int> getTopView(TreeNode<int> *root) {
         auto vertex = f.first;
         auto vertical = f.second.first, level = f.second.second;
 
-        hash[vertical][level].insert(vertex -> val);
+        hash[vertical].push_back(vertex -> val);
 
         if(vertex -> left != NULL){
             Q.push({vertex -> left, {vertical - 1, level + 1}});
@@ -875,10 +875,7 @@ vector<int> getTopView(TreeNode<int> *root) {
 
     for(auto i : hash){
         for(auto j : i.second){
-            for(auto it = j.second.begin(); it != j.second.end(); it++){
-                store.push_back(*it);
-                break;
-            }
+            store.push_back(j);
             break;
         }
     }
