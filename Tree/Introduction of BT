@@ -520,6 +520,8 @@ public:
 
 -----------------------------------------------------------------------
 
+            (diameter of tree)
+
 class Solution {
 public:
 
@@ -544,6 +546,39 @@ public:
     int diameterOfBinaryTree(TreeNode* root) {
         
         dia(root);
+
+        return mx;
+
+    }
+};
+
+-------------------------------------------------------------------------------
+
+            (maximum path sum)
+
+class Solution {
+public:
+
+    int mx = -1e9;
+
+    int func(TreeNode* root){
+        
+        if(root == NULL){
+            return 0;
+        }
+
+        int dabi = max(0, func(root -> left));
+
+        int jmni = max(0, func(root -> right));
+
+        mx = max(mx, root -> val + dabi + jmni);
+
+        return root -> val + max(dabi, jmni);
+    }
+
+    int maxPathSum(TreeNode* root) {
+        
+        func(root);
 
         return mx;
 
