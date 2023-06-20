@@ -378,3 +378,66 @@ public:
         return post;
     }
 };
+
+--------------------------------------------------------------------------
+
+                (Depth)
+
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+
+        if(root == NULL){
+            return 0;
+        }
+        
+        queue<TreeNode*> Q;
+        Q.push(root);
+
+        int cnt = 0;
+
+        while(!Q.empty()){
+            auto s = Q.size();
+            cnt++;
+
+            while(s--){
+                auto f = Q.front();
+                Q.pop();
+
+                if(f -> left != NULL){
+                    Q.push(f -> left);
+                }
+
+                if(f -> right != NULL){
+                    Q.push(f -> right);
+                }
+            }
+        }
+
+        return cnt;
+    }
+};
+
+class Solution {
+public:
+
+    int depth(TreeNode* root){
+        if(root == NULL && root == NULL){
+            return 0;
+        }
+
+        return 1 + max(depth(root -> left), depth(root -> right));
+    }
+
+    int maxDepth(TreeNode* root) {
+
+        if(root == NULL){
+            return 0;
+        }
+        
+        return depth(root);
+
+    }
+};
+
+time --> O(N) space --> O(N)
