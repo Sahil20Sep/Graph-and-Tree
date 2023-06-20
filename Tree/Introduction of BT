@@ -971,3 +971,68 @@ public:
 
     }
 };
+
+--------------------
+
+class Solution {
+public:
+
+    void rightview(TreeNode* root, int level, vector<int> &ans){
+
+        if(root == NULL){
+            return ;
+        }
+
+        if(level == ans.size()){
+            ans.push_back(root -> val);
+        }
+
+        rightview(root -> right, level + 1, ans);
+        rightview(root -> left, level + 1, ans);
+
+    }
+
+    vector<int> rightSideView(TreeNode* root) {
+        if(root == NULL){
+            return {};
+        }
+
+        vector<int> ans;
+        
+        rightview(root, 0, ans);
+
+        return ans;
+
+    }
+};
+
+------------------------------------------------------------------------------------
+
+            (left view) --> O(N) time and O(H) -- > space
+
+void leftview(TreeNode<int> *root, int level, vector<int> &ans){
+    if(root == NULL){
+        return;
+    }
+
+    if(ans.size() == level){
+        ans.push_back(root -> data);
+    }
+
+    leftview(root -> left, level + 1, ans);
+    leftview(root -> right, level + 1, ans);
+}
+
+vector<int> getLeftView(TreeNode<int> *root)
+{
+    if(root == NULL){
+        return {};
+    }
+
+    vector<int > ans;
+
+    leftview(root, 0, ans);
+
+    return ans;
+    
+}
