@@ -924,3 +924,5 @@ vector<int> bottomView(BinaryTreeNode<int> * root){
     return store;
     
 }
+
+in this view petter we can not implement recursive because of depth, so we have to pareeller introduce some height concept
