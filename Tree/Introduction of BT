@@ -787,3 +787,101 @@ vector<int> traverseBoundary(TreeNode<int>* root){
     return ans;
 
 }
+
+-------------------------------------------------------------------------------------------------
+
+                (987. Vertical Order Traversal of a Binary Tree)
+
+class Solution {
+public:
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        
+        queue<pair<TreeNode*, pair<int, int>>> Q;
+        Q.push({root, {0, 0}});
+
+        map<int, map<int, multiset<int>>> hash;
+
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+
+            auto vertex = f.first;
+            auto vertical = f.second.first, level = f.second.second;
+
+            hash[vertical][level].insert(vertex -> val);
+
+            if(vertex -> left != NULL){
+                Q.push({vertex -> left, {vertical - 1, level + 1}});
+            }
+
+            if(vertex -> right != NULL){
+                Q.push({vertex -> right, {vertical + 1, level + 1}});
+            }
+        }
+
+        vector<vector<int>> ans;
+
+        vector<int> store;
+
+        for(auto i : hash){
+            for(auto j : i.second){
+                for(auto it = j.second.begin(); it != j.second.end(); it++){
+                    store.push_back(*it);
+                }
+            }
+            ans.push_back(store);
+            store.clear();
+        }
+
+        return ans;
+
+    }
+};
+
+--------------------------------------------------------------------------------------------------------------
+
+            (TOP view) - small change in above code
+
+vector<int> getTopView(TreeNode<int> *root) {
+
+    if(root == NULL){
+        return {};
+    }
+    
+    queue<pair<TreeNode<int>*, pair<int, int>>> Q;
+    Q.push({root, {0, 0}});
+
+    map<int, map<int, multiset<int>>> hash;
+
+    while(!Q.empty()){
+        auto f = Q.front();
+        Q.pop();
+
+        auto vertex = f.first;
+        auto vertical = f.second.first, level = f.second.second;
+
+        hash[vertical][level].insert(vertex -> val);
+
+        if(vertex -> left != NULL){
+            Q.push({vertex -> left, {vertical - 1, level + 1}});
+        }
+
+        if(vertex -> right != NULL){
+            Q.push({vertex -> right, {vertical + 1, level + 1}});
+        }
+    }
+
+    vector<int> store;
+
+    for(auto i : hash){
+        for(auto j : i.second){
+            for(auto it = j.second.begin(); it != j.second.end(); it++){
+                store.push_back(*it);
+                break;
+            }
+            break;
+        }
+    }
+
+    return store;
+}
