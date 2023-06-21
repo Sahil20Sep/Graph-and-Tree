@@ -1336,6 +1336,48 @@ public:
     }
 };
 
+---------------------------------------------------------------------------------------
 
+        (Children sum property)
+
+
+increse when going down and sum it up when going up
+
+void convertTree(node* root){
+    if(root == NULL) return;
+     
+    int childSum = 0;
+     
+    if(root->left) childSum+=root->left->data;
+    if(root->right) childSum+=root->right->data;
+     
+    if(childSum>=root->data){
+        //change root
+        root->data = childSum;
+    }
+    else{
+        //change both children
+        if(root->left) root->left->data = root->data;
+        if(root->right) root->right->data = root->data;
+         
+    }
+     
+    //now go down the tree and check others - Inorder
+    convertTree(root->left);
+    convertTree(root->right);
+     
+    //here is the backtracking part happens, as changes may happen
+    int totVal = 0;
+     
+    if(root->left) totVal+=root->left->data;
+    if(root->right) totVal+=root->right->data;
+     
+    // Leaf node dont update, as it will make it 0
+    if(root->left || root->right) root->data = totVal;
+    //So that at last the children Sum property stays TRUE
+ 
+}
+
+----------------------------------------------------------------------------------------
 
 
