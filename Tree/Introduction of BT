@@ -1540,5 +1540,8 @@ int timeToBurnTree(BinaryTreeNode<int>* root, int start)
 
 (why not dfs) because we have to move level wise and parelly
 
+o(n) + o(n) --> time complexity
 -----------------------------------------------------------------------------------------------
+
+
 
