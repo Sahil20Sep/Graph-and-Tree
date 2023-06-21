@@ -1650,3 +1650,11 @@ public:
     }
 };
 
+-------------------------------------------------------------------------------------
+
+        (Construct a unique binart Tree)
+
+if give order is preorder and post order then we can not constuct a unique binary tree
+
+
+
