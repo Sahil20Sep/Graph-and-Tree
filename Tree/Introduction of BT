@@ -1293,6 +1293,48 @@ public:
 
 -------------------------------------------------------------------------------------------------------------------------------------
 
+            (maximum width of bt)
+
+class Solution {
+public:
+    int widthOfBinaryTree(TreeNode* root) {
+        
+        map<int, int> mn, mx;
+
+        queue<pair<TreeNode*, int>> Q;
+        Q.push({root, 0});
+
+        int ans = 0;
+
+        while(!Q.empty()){
+
+            auto s = Q.size();
+
+            auto mn = Q.front().second, mx = Q.back().second;
+
+            ans = max(ans, mx - mn + 1);
+
+            while(s--){
+                auto f= Q.front();
+                Q.pop();
+
+                auto vertex = f.first;
+                auto level = f.second;
+
+                if(vertex -> left != NULL){
+                    Q.push({vertex -> left, 2LL * level + 1});
+                }
+
+                if(vertex -> right != NULL){
+                    Q.push({vertex -> right, 2LL * level + 2});
+                }
+            }
+        }
+
+        return ans;
+
+    }
+};
 
 
 
