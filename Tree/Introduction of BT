@@ -1381,4 +1381,83 @@ void convertTree(node* root){
 O(n) and O(H)
 ----------------------------------------------------------------------------------------
 
+        (dist K target node to another node) retturn vector of node
+
+
+class Solution {
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+
+        if(root == NULL){
+            return {};
+        }
+        
+        map<TreeNode*, TreeNode*> hash;
+
+        queue<TreeNode*> Q;
+        Q.push(root);
+
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+
+            if(f -> left != NULL){
+                hash[f -> left] = f;
+                Q.push(f -> left);
+            }
+
+            if(f -> right != NULL){
+                hash[f -> right] = f;
+                Q.push(f -> right);
+            }
+        }
+
+        map<TreeNode*, bool> visited;
+
+        queue<pair<TreeNode*, int>> QQ;
+
+        QQ.push({target, 0});
+        visited[target] = true;
+
+        vector<int> ans;
+
+        while(!QQ.empty()){
+
+            auto s = QQ.size();
+
+            if(QQ.front().second == k){
+                ans.push_back(QQ.front().first -> val);
+                QQ.pop();
+                continue;
+            }
+
+            while(s--){
+                auto f = QQ.front();
+                QQ.pop();
+
+                auto vertex = f.first;
+                auto dist = f.second;
+
+                if(vertex -> left != NULL && !visited[vertex -> left]){
+                    visited[vertex -> left] = true;
+                    QQ.push({vertex -> left, dist + 1});
+                }
+
+                if(vertex -> right != NULL && !visited[vertex -> right]){
+                    visited[vertex -> right] = true;
+                    QQ.push({vertex -> right, dist + 1});
+                }
+
+                if(vertex != root && !visited[hash[vertex]]){
+                    visited[hash[vertex]] = true;
+                    QQ.push({hash[vertex], dist + 1});
+                }
+            }
+        }
+
+        return ans;
+
+    }
+};
+
 
