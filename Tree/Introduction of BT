@@ -1543,5 +1543,33 @@ int timeToBurnTree(BinaryTreeNode<int>* root, int start)
 o(n) + o(n) --> time complexity
 -----------------------------------------------------------------------------------------------
 
+                (count the number of nodes in bt)
 
+class Solution {
+public:
+
+    void preorder(TreeNode* root, int &ans){
+
+        if(root == NULL){
+            return ;
+        }
+
+        ans++;
+
+        preorder(root -> left, ans);
+
+        preorder(root -> right, ans);
+
+    }
+
+    int countNodes(TreeNode* root) {
+
+        int ans = 0;
+
+        preorder(root, ans);
+
+        return ans;
+
+    }
+};
 
