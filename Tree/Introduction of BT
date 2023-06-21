@@ -1587,3 +1587,65 @@ public:
     }
 };
 
+--------
+
+O(log(N) ^ 2);
+
+class Solution {
+public:
+
+    int find_left_height(TreeNode* root){
+
+        if(root == NULL){
+            return 0;
+        }
+
+        int len = 0;
+
+        while(root != NULL){
+            len++;
+            root = root -> left;
+        }
+
+        return len;
+
+    }
+
+    int find_right_height(TreeNode* root){
+        
+        if(root == NULL){
+            return 0;
+        }
+
+        int len = 0;
+
+        while(root != NULL){
+            len++;
+            root = root -> right;
+        }
+
+        return len;
+
+    }
+
+    int countNodes(TreeNode* root) {
+
+        if(root == NULL){
+            return 0;
+        }
+
+        int left_height = find_left_height(root);
+
+        int right_height = find_right_height(root);
+
+        if(left_height == right_height){
+
+            return (1 << left_height) - 1;
+
+        }
+
+        return 1 + countNodes(root -> left) + countNodes(root -> right);
+
+    }
+};
+
