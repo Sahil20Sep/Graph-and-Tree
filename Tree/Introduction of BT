@@ -1073,3 +1073,191 @@ public:
 
     }
 };
+
+--------------------------------------------------------------------
+
+        (path to node) - itretive
+
+vector<int> Solution::solve(TreeNode* root, int find) {
+    
+    queue<TreeNode*> Q;
+    Q.push(root);
+    
+    map<int, int> hash;
+    
+    while(!Q.empty()){
+        auto f = Q.front();
+        Q.pop();
+        
+        if(f -> left != NULL){
+            hash[f -> left -> val] = f -> val;
+            Q.push(f -> left);
+        }
+        
+        if(f -> right != NULL){
+            hash[f -> right -> val] = f -> val;
+            Q.push(f -> right);
+        }
+    }
+    
+    vector<int> ans;
+    
+    while(hash[find] != 0){
+        ans.push_back(find);
+        find = hash[find];
+    }
+    
+    ans.push_back(root -> val);
+    
+    reverse(ans.begin(), ans.end());
+    
+    return ans;
+    
+}
+
+        Recursive approcch
+
+bool inorder(TreeNode* root, int find, vector<int> &ans){
+    
+    if(root == NULL){
+        return false;
+    }
+    
+    bool flag = false;
+    
+    if(root -> val == find){
+        ans.push_back(find);
+        return true;    
+    }
+    
+    ans.push_back(root -> val);
+    
+    flag |= inorder(root -> left, find, ans);
+    
+    flag |= inorder(root -> right, find, ans);
+    
+    if(!flag){
+        ans.pop_back();
+    }
+    
+    return flag;
+    
+}
+ 
+vector<int> Solution::solve(TreeNode* root, int find) {
+    
+    vector<int> ans;
+    
+    inorder(root, find, ans);
+    
+    return ans;
+        
+}
+
+--------------------------------------------------------------------------------------------------------------
+
+        (LCA)
+
+class Solution {
+public:
+
+    bool inorder(TreeNode* root, int p, vector<TreeNode*> &ans1){
+        if(root == NULL){
+            return false;
+        }
+
+        bool flag = false;
+
+        if(root -> val == p){
+            ans1.push_back(root);
+            return true;
+        }
+
+        ans1.push_back(root);
+
+        flag |= inorder(root -> left, p, ans1);
+
+        flag |= inorder(root -> right, p, ans1);
+
+        if(!flag){
+            ans1.pop_back();
+        }
+
+        return flag;
+    }
+
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+
+        if(root == NULL || p == NULL || q == NULL){
+            return root;
+        }
+        
+        vector<TreeNode*> ans1;
+
+        inorder(root, p -> val, ans1);
+
+        vector<TreeNode*> ans2;
+
+        inorder(root, q -> val, ans2);
+
+        TreeNode* lca;
+
+        for(int i = 0; i < min(ans1.size(), ans2.size()); i++){
+            if((ans1[i] -> val) == (ans2[i] -> val)){
+                lca = ans1[i];
+            }else{
+                break;
+            }
+        }
+
+        return lca;
+
+    }
+};
+
+--------------------
+
+        (LCA)
+
+class Solution {
+public:
+
+    TreeNode* lca(TreeNode* root, TreeNode* p, TreeNode* q){
+
+        if(root == NULL){
+            return NULL;
+        }
+
+        if(root == p || root == q){
+            return root;
+        }
+
+        TreeNode *left = lca(root -> left, p, q);
+
+        TreeNode *right = lca(root -> right, p, q);
+
+        if(left == NULL && right == NULL){
+            return NULL;
+        }
+
+        if(left != NULL && right != NULL){
+            return root;
+        }
+
+        return left == NULL ? right : left;
+
+    }
+
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+
+        return lca(root, p, q);
+        
+    }
+};
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
