@@ -1575,3 +1575,15 @@ public:
 
 time O(N) and space O(log(N)) because it is complete tree;
 
+just one line
+
+class Solution {
+public:
+
+    int countNodes(TreeNode* root) {
+
+        return root == NULL ? 0 : 1 + countNodes(root -> left) + countNodes(root -> right);
+
+    }
+};
+
