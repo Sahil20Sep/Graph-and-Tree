@@ -1573,3 +1573,5 @@ public:
     }
 };
 
+time O(N) and space O(log(N)) because it is complete tree;
+
