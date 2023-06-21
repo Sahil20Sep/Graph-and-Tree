@@ -1464,6 +1464,8 @@ Time -. n aand space n;
 
 -----------------------------------------------------------------------------------------------------------
 
+        (Burn tree and min time)
+
 int timeToBurnTree(BinaryTreeNode<int>* root, int start)
 {
     map<BinaryTreeNode<int>*, BinaryTreeNode<int>*> parent;
@@ -1536,4 +1538,7 @@ int timeToBurnTree(BinaryTreeNode<int>* root, int start)
 
 }
 
+(why not dfs) because we have to move level wise and parelly
+
+-----------------------------------------------------------------------------------------------
 
