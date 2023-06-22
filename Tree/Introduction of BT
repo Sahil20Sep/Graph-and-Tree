@@ -1702,4 +1702,50 @@ public:
     }
 };
 
+O(N) and O(N) and hashmap
+
+---------------------------------------------------------------------------------------------
+
+        (inorder and postorder)
+
+class Solution {
+public:
+
+    TreeNode* func(int post_start, int post_end, int in_start, int in_end, vector<int> &inorder, vector<int> &postorder, unordered_map<int, int> &hash){
+
+        if(post_start > post_end || in_start > in_end){
+            return NULL;
+        }
+
+        TreeNode* root = new TreeNode(postorder[post_end]);
+
+        int inorder_root = hash[postorder[post_end]];
+
+        int rem = in_end - inorder_root;
+
+        root -> left = func(post_start, post_end - rem - 1, in_start, inorder_root - 1, inorder, postorder, hash);
+
+        root -> right = func(post_end - rem, post_end - 1, inorder_root + 1, in_end, inorder, postorder, hash);
+
+        return root;
+
+    }
+
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        
+        int n = inorder.size();
+
+        unordered_map<int, int> hash;
+
+        for(int i = 0; i < n; i++){
+            hash[inorder[i]] = i;
+        }
+
+        TreeNode* root = func(0, n - 1, 0, n - 1, inorder, postorder, hash);
+
+        return root;
+
+    }
+};
+
 
