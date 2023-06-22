@@ -1656,5 +1656,7 @@ public:
 
 if give order is preorder and post order then we can not constuct a unique binary tree
 
+if given order is inorder and (post / pre) then we can constuct a unique binary tree
+
 
 
