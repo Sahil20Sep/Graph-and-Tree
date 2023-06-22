@@ -1748,4 +1748,108 @@ public:
     }
 };
 
+----------------------------------------------------------------------------------------------
+
+                    serialize and deserialize binary tree
+
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        
+        string s = "";
+
+        if(root == NULL){
+            return s;
+        }
+
+        queue<TreeNode*> Q;
+        Q.push(root);
+
+        s.append(to_string(root -> val) + ",");
+
+        while(!Q.empty()){
+            auto f = Q.front();
+            Q.pop();
+
+            if(f -> left != NULL){
+                Q.push(f -> left);
+                s.append(to_string(f -> left -> val) + ",");
+            }else{
+                s.append("#,");
+            }
+
+            if(f -> right != NULL){
+                Q.push(f -> right);
+                s.append(to_string(f -> right -> val) + ',');
+            }else{
+                s.append("#,");
+            }
+        }
+
+        // cout << s << endl;
+
+        return s;
+
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+
+        if(!data.size()){
+            return NULL;
+        }
+
+        stringstream s(data);
+        string str;
+
+        getline(s, str, ',');
+
+        queue<TreeNode*> Q;
+
+        TreeNode* root = new TreeNode(stoi(str));
+
+        Q.push(root);
+
+        while(!Q.empty()){
+
+            auto f = Q.front();
+            Q.pop();
+
+            getline(s, str, ',');
+
+            if(str == "#"){
+
+                f -> left = NULL;
+
+            }else{
+
+                TreeNode* temp = new TreeNode(stoi(str));
+                Q.push(temp);
+
+                f -> left = temp;
+
+            }
+
+            getline(s, str, ',');
+
+            if(str == "#"){
+
+                f -> right = NULL;
+
+            }else{
+
+                TreeNode* temp = new TreeNode(stoi(str));
+                Q.push(temp);
+
+                f -> right = temp;
+
+            }
+        }
+
+        return root;
+        
+    }
+};
 
