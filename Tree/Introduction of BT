@@ -1659,4 +1659,47 @@ if give order is preorder and post order then we can not constuct a unique binar
 if given order is inorder and (post / pre) then we can constuct a unique binary tree
 
 
+            (given is preorder and inorder)
+
+
+class Solution {
+public:
+
+    TreeNode* func(int pre_start, int pre_end, int in_start, int in_end, vector<int> &preorder, vector<int> &inorder, unordered_map<int, int> &hash){
+
+        if(pre_start > pre_end || in_start > in_end){
+            return NULL;
+        }
+
+        TreeNode* root = new TreeNode(preorder[pre_start]);
+
+        int inorder_root = hash[preorder[pre_start]];
+
+        int rem = inorder_root - in_start;
+
+        root -> left = func(pre_start + 1, pre_start + rem, in_start, inorder_root - 1, preorder, inorder, hash);
+
+        root -> right = func(pre_start + rem + 1, pre_end, inorder_root + 1, in_end, preorder, inorder, hash);
+
+        return root;
+
+    }
+
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+
+        int n = preorder.size();
+
+        unordered_map<int, int> hash;
+
+        for(int i = 0; i < n; i++){
+            hash[inorder[i]] = i;
+        }
+        
+        TreeNode* root = func(0, n - 1, 0, n - 1, preorder, inorder, hash);
+
+        return root; 
+
+    }
+};
+
 
