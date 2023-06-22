@@ -1965,3 +1965,37 @@ public:
     }
 };
 
+-------------------------------------------------------------------------------------------------
+
+            (make binary tree to flatten tree or link list)
+
+class Solution {
+public:
+
+    TreeNode* prev = NULL;
+
+    void func(TreeNode* root){
+
+        if(root == NULL){
+            return ;
+        }
+
+        func(root -> right);
+
+        func(root -> left);
+
+        root -> right = prev;
+
+        root -> left = NULL;
+
+        prev = root;
+
+    }
+
+    void flatten(TreeNode* root) {
+
+        func(root);
+
+    }
+};
+
