@@ -2187,3 +2187,179 @@ public:
 
 Log2(N)
 
+-----------------------------------------------------------------------------------------
+
+            (delete a node in bst)
+
+class Solution {
+public:
+
+    TreeNode* find_deep_right_child(TreeNode* root){
+
+        while(root -> right != NULL){
+
+            root = root -> right;
+
+        }
+
+        return root;
+
+    }
+
+    TreeNode* func(TreeNode* root){
+
+        if(root -> left == NULL){
+
+            return root -> right;
+
+        }else if(root -> right == NULL){
+
+            return root -> left;
+
+        }
+
+        TreeNode* right_child = root -> right;
+
+        TreeNode* left_child = find_deep_right_child(root -> left); 
+
+        left_child -> right = right_child;
+
+        return root -> left;
+
+    }
+
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        
+        if(root == NULL){
+
+            return root;
+
+        }
+
+        if(root -> val == key){
+
+            return func(root);
+
+        }
+
+        TreeNode* dummy = root;
+
+        while(root != NULL){
+
+            if(key < root -> val){
+
+                if(root -> left != NULL && root -> left -> val == key){
+
+                    root -> left = func(root -> left);
+                    break;
+
+                }else{
+
+                    root = root -> left;
+                }
+
+            }else{
+
+                if(root -> right != NULL && root -> right -> val == key){
+
+                    root -> right = func(root -> right);
+                    break;
+
+                }else{
+
+                    root = root -> right;
+                    
+                }
+            }
+        }
+
+        return dummy;
+
+    }
+};
+
+-----------------------------------------------------------------------------------------------------
+
+        (find kth smallest number in binary tree)
+
+time order of n + order of nlogn and space order of n
+
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+
+        queue<TreeNode*> Q;
+        Q.push(root);
+
+        vector<int> store;
+
+        while(!Q.empty()){
+            auto f= Q.front();
+            Q.pop();
+
+            store.push_back(f -> val);
+
+            if(f -> left != NULL){
+                Q.push(f -> left);
+            }
+
+            if(f -> right != NULL){
+                Q.push(f -> right);
+            }
+        }
+        
+        sort(store.begin(), store.end());
+
+        return store[k - 1];
+
+    }
+};
+
+----------------
+
+any inorder of the binary search tree is sorted
+
+class Solution {
+public:
+
+    void inorder(TreeNode* root, int &k, int &ans){
+
+        if(root == NULL){
+            return;
+        }
+
+        inorder(root -> left, k, ans);
+
+        k--;
+
+        if(k == 0){
+            ans = root -> val;
+            return;
+        }
+
+        inorder(root -> right, k, ans);
+
+    }
+
+    int kthSmallest(TreeNode* root, int k) {
+
+        int ans = -1;
+
+        inorder(root, k, ans);
+
+        return ans;
+
+    }
+};
+
+(morries traveleser gives dedely signal don'tt know)
+
+-----------------------------------------------------------------------------
+
+            (kth largest element in binary search tree)
+
+let's say 5 th largest element in bst so we calculate (#node - 5) smallest. and copyy the above code.
+
+
+
+
