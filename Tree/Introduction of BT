@@ -2447,7 +2447,7 @@ public:
 
     bool isValidBST(TreeNode* root) {
 
-        return func(root, -1e15, 1e15);
+        return func(root, LONG_MIN, LONG_MAX);
 
     }
 };
