@@ -2376,5 +2376,83 @@ node* kthlargest(node* root,int& k)
 	return kthlargest(root->left,k);
 }
 
+------------------------------------------------------------------------------------------
+
+		(check given bt is bst or not)
+
+first idea is inorder
+
+class Solution {
+public:
+
+    void inorder(TreeNode* root, vector<int> &ans){
+
+        if(root == NULL){
+            return ;
+        }
+
+        inorder(root -> left, ans);
+
+        ans.push_back(root -> val);
+
+        inorder(root -> right, ans);
+
+    }
+
+    bool isValidBST(TreeNode* root) {
+
+        vector<int> ans;
+        
+        inorder(root, ans);
+
+        for(int i = 1; i < ans.size(); i++){
+            if(ans[i] <= ans[i - 1]){
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+};
+
+-----------------------
+
+	(give rangee)
+
+class Solution {
+public:
+
+    bool func(TreeNode* root, long long mn, long long mx){
+
+        if(root == NULL){
+            return true;
+        }
+
+        long long store = root -> val;
+
+        if(store <= mn || store >= mx){
+            return false;
+        }
+
+        bool flag = true;
+
+        flag &= func(root -> left, mn, store);
+
+        flag &= func(root -> right, store, mx);
+
+        return flag;
+
+    }
+
+    bool isValidBST(TreeNode* root) {
+
+        return func(root, -1e15, 1e15);
+
+    }
+};
+
+
+
 
 
