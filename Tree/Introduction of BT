@@ -2480,6 +2480,56 @@ public:
 
 --------------------------------------------------------------------------------------
 
+			(given is preorder and make bst)
+
+class Solution {
+public:
+
+    TreeNode* make(int pre_start, int pre_end, int in_start, int in_end, vector<int> &inorder, vector<int> &preorder, map<int, int> &hash){
+
+        if(pre_start > pre_end || in_start > in_end){
+            return NULL;
+        }
+
+        TreeNode* root = new TreeNode(preorder[pre_start]);
+
+        int inorder_root = hash[preorder[pre_start]];
+
+        int rem = inorder_root - in_start;
+
+        root -> left = make(pre_start + 1, pre_start + rem, in_start, inorder_root - 1, inorder, preorder, hash);
+
+        root -> right = make(pre_start + rem + 1, pre_end, inorder_root + 1, in_end, inorder, preorder, hash);
+
+        return root;
+
+    }
+
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        
+        vector<int> inorder(preorder);
+
+        sort(inorder.begin(), inorder.end());
+
+        map<int, int> hash;
+
+        int n = inorder.size();
+
+        for(int i = 0; i < n; i++){
+
+            hash[inorder[i]] = i;
+
+        }
+
+        return make(0, n - 1, 0, n - 1, inorder, preorder, hash);
+
+    }
+};
+
+time is O(n * log(N)) + O(N)
+
+---------------------------------------------------------------------------------------------
+
 
 
 
