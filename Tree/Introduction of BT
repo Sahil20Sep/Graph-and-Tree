@@ -2081,3 +2081,109 @@ public:
 
 O(N) time and O(1) time
 
+-------------------------------------------------------------------------------------------------------
+
+left_side < root < right_side and it's true for the entire left subtree and entire right subtree
+
+height of tree is log2(N)
+
+-------------------------------------------------------------------------------------------------------
+
+                    (search in binary tree)
+
+class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int val) {
+        
+        while(root != NULL && root -> val != val){
+
+            root = val < root -> val ? root -> left : root -> right;
+
+        }
+
+        return root;
+
+    }
+};
+
+--------------------------------------------------------------------------------------------------------------
+
+            (ceil function in binary search tree)
+
+int findCeil(BinaryTreeNode<int> *root, int x){
+    
+    int ans = -1;
+
+    while(root != NULL){
+
+        x <= root -> data ? ans = root -> data, root = root -> left : root = root -> right;
+
+    }
+
+    return ans;
+
+}
+
+------------------------------------------------------------------------------------------------------------------
+
+            (floor function)
+
+int floorInBST(TreeNode<int> * root, int x)
+{
+    int ans = -1;
+
+    while(root != NULL){
+
+        (x >= root -> val) ? ans = root -> val, root = root -> right : root = root -> left;
+
+    }
+
+    return ans;
+}
+
+---------------------------------------------------------------------------------------------------------------------
+
+                (Insert into a Binary Search Tree)
+
+class Solution {
+public:
+    TreeNode* insertIntoBST(TreeNode* root, int val) {
+
+        if(root == NULL){
+            root = new TreeNode(val);
+            return root;
+        }
+
+        TreeNode* curr = root;
+        
+        while(curr != NULL){
+            
+            if(val < curr -> val){
+
+                if(curr -> left == NULL){
+                    curr -> left = new TreeNode(val);
+                    break;
+                }
+
+                curr = curr -> left;
+
+            }else{
+
+                if(curr -> right == NULL){
+                    curr -> right = new TreeNode(val);
+                    break;
+                }
+
+                curr = curr -> right;
+
+            }
+
+        }
+
+        return root;
+
+    }
+};
+
+Log2(N)
+
