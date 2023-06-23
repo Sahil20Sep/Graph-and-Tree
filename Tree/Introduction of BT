@@ -2360,6 +2360,21 @@ public:
 
 let's say 5 th largest element in bst so we calculate (#node - 5) smallest. and copyy the above code.
 
+node* kthlargest(node* root,int& k)
+{
+	if(root==NULL)
+	return NULL;
+	
+	node* right=kthlargest(root->right,k);
+	if(right!=NULL)
+	return right;
+	k--;
+	
+	if(k==0)
+	return root;
+	
+	return kthlargest(root->left,k);
+}
 
 
 
