@@ -2924,6 +2924,60 @@ int largestBST(TreeNode<int>* root)
 
 O(N) time and O(1) space
 
+-------------------------
+
+		(maximum sum of binary search tree in binary tree)
+
+class NodeValue{
+public:
+
+    int maxSum; 
+    int maxNode; 
+    int minNode;
+
+    NodeValue(int maxSum, int maxNode, int minNode){
+        this -> maxSum = maxSum;
+        this -> maxNode = maxNode;
+        this -> minNode = minNode;
+    }
+};
+
+NodeValue func(TreeNode* root, int &sum){
+
+    if(root == NULL){
+
+        return NodeValue(0, INT_MIN, INT_MAX);
+
+    }
+
+    auto slow = func(root -> left, sum);
+
+    auto fast = func(root -> right, sum);
+
+    if((slow.maxNode < root -> val) && (root -> val < fast.minNode)){
+
+        sum = max(sum, root -> val + slow.maxSum + fast.maxSum);
+
+        return NodeValue(root -> val + slow.maxSum + fast.maxSum, max({root -> val, slow.maxNode, fast.maxNode}), min({root -> val, slow.minNode, fast.minNode}));
+
+    }
+
+    return NodeValue(max(slow.maxSum, fast.maxSum), INT_MAX, INT_MIN);
+
+}
+
+class Solution {
+public:
+    int maxSumBST(TreeNode* root) {
+
+        int sum = 0;
+        
+        func(root, sum);
+
+        return sum;
+    }
+};
+
 
 
 
