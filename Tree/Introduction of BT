@@ -2776,6 +2776,106 @@ public:
 
 time O(N) and O(H) * 2 space.
 
+----------------------------------------------------------------------------------------
+
+	(make two swap and correct the bst)
+
+brute force is take inorder of tree and sort it.
+
+now compare when node are not same put the value of this node in bt.
+
+bool my(TreeNode* a, TreeNode* b){
+    return a -> val < b -> val;
+}
+
+class Solution {
+public:
+
+    void inorder(TreeNode* root, vector<TreeNode*> &ans){
+
+        if(root == NULL){
+            return;
+        }
+
+        inorder(root -> left, ans);
+
+        ans.push_back(root);
+
+        inorder(root -> right, ans);
+    }
+
+    void recoverTree(TreeNode* root) {
+
+        vector<TreeNode*> ans;
+
+        inorder(root, ans);
+
+        vector<TreeNode*> temp(ans);
+
+        sort(temp.begin(), temp.end(), my);
+
+        TreeNode* first = NULL;
+
+        TreeNode* last = NULL;
+
+        for(int i = 0; i < ans.size(); i++){
+            if(ans[i] != temp[i]){
+                first = ans[i];
+                last = temp[i];
+                break;
+            }
+        }
+
+        swap(first -> val, last -> val);
+    }
+};
+
+-----
+
+time o(N) and space o(1).
+
+class Solution {
+public:
+
+    TreeNode* first = NULL;
+    TreeNode* middle = NULL;
+    TreeNode* last = NULL;
+    TreeNode* prev = NULL;
+
+    void inorder(TreeNode* root){
+
+        if(root == NULL){
+            return;
+        }
+
+        inorder(root -> left);
+
+        if(prev != NULL && (prev -> val > root -> val)){
+            if(first == NULL){
+                first = prev;
+                middle = root;
+            }else{
+                last = root;
+            }
+        }
+
+        prev = root;
+
+        inorder(root -> right);
+    }
+
+    void recoverTree(TreeNode* root) {
+
+        inorder(root);
+
+        if(first != NULL && last != NULL){
+            swap(first -> val, last -> val);
+        }else{
+            swap(first -> val, middle -> val);
+        }
+    }
+};
+
 
 
 
