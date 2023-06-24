@@ -2876,6 +2876,54 @@ public:
     }
 };
 
+------------------------------------------------------------------------------
+			(largest bst in bt)
+
+template <typename T>
+class NodeValue{
+public:
+
+    T maxSize; 
+    T maxNode; 
+    T minNode;
+
+    NodeValue(T maxSize, T maxNode, T minNode){
+        this -> maxSize = maxSize;
+        this -> maxNode = maxNode;
+        this -> minNode = minNode;
+    }
+
+};
+
+NodeValue<int> func(TreeNode<int>* root){
+
+    if(root == NULL){
+
+        return NodeValue(0, INT_MIN, INT_MAX);
+
+    }
+
+    auto slow = func(root -> left);
+
+    auto fast = func(root -> right);
+
+    if((slow.maxNode < root -> data) && (root -> data < fast.minNode)){
+
+        return NodeValue(1 + slow.maxSize + fast.maxSize, max({root -> data, slow.maxNode, fast.maxNode}), min({root -> data, slow.minNode, fast.minNode}));
+
+    }
+
+    return NodeValue(max(slow.maxSize, fast.maxSize), INT_MAX, INT_MIN);
+
+}
+
+int largestBST(TreeNode<int>* root) 
+{
+    return func(root).maxSize;
+}
+
+O(N) time and O(1) space
+
 
 
 
