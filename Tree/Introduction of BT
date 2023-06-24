@@ -2528,7 +2528,253 @@ public:
 
 time is O(n * log(N)) + O(N)
 
+------------
+
+class Solution {
+public:
+
+    TreeNode* make(vector<int>& preorder, int &index, int bound){
+
+        if(index == preorder.size() || preorder[index] > bound){
+            return NULL;
+        }
+
+        TreeNode* root = new TreeNode(preorder[index]);
+
+        index++;
+
+        root -> left = make(preorder, index, root -> val);
+
+        root -> right = make(preorder, index, bound);
+
+        return root;
+    }
+
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+
+        int index = 0;
+        
+        return make(preorder, index, INT_MAX);
+    }
+};
+
 ---------------------------------------------------------------------------------------------
+
+		(inorder successor in bst)
+
+class Solution{
+  public:
+    // returns the inorder successor of the Node x in BST (rooted at 'root')
+    Node * inOrderSuccessor(Node *root, Node *x)
+    {
+        Node* ans = NULL;
+        
+        while(root != NULL){
+            
+            if(x -> data >= root -> data){
+                
+                root = root -> right;
+                
+            }else{
+                
+                ans = root;
+                
+                root = root -> left;
+                
+            }
+        }
+        
+        return ans;
+        
+    }
+};
+
+---------------------------------------------------------------------------------
+
+			(inorder pre in bst)
+
+class Solution{
+  public:
+    // returns the inorder successor of the Node x in BST (rooted at 'root')
+    Node * inOrderSuccessor(Node *root, Node *x)
+    {
+        Node* ans = NULL;
+        
+        while(root != NULL){
+            
+            if(x -> data <= root -> data){
+                
+                root = root -> left;
+                
+            }else{
+                
+                ans = root;
+                
+                root = root -> right;
+                
+            }
+        }
+        
+        return ans;
+        
+    }
+};
+
+---------------------------------------------------------------------------------
+
+		(BST design question inorder using stacck next and hasnext function)
+
+class BSTIterator {
+public:
+
+    stack<TreeNode*> st;
+
+    void pushall(TreeNode* root){
+        while(root != NULL){
+            st.push(root);
+            root = root -> left;
+        }
+    }
+
+    BSTIterator(TreeNode* root) {
+        pushall(root);
+    }
+    
+    int next() {
+        TreeNode* ans = st.top();
+        st.pop();
+        pushall(ans -> right);
+        return ans -> val;
+    }
+    
+    bool hasNext() {
+        return !st.empty();
+    }
+};
+
+-------------------------------------------------------------------------------------------------
+
+		(sum of two element == k)
+
+class Solution {
+public:
+
+    void inorder(TreeNode* root, vector<int> &ans){
+
+        if(root == NULL){
+            return ;
+        }
+
+        inorder(root -> left, ans);
+
+        ans.push_back(root -> val);
+
+        inorder(root -> right, ans);
+
+    }
+
+    bool findTarget(TreeNode* root, int k) {
+        
+        vector<int> ans;
+
+        inorder(root, ans);
+
+        int slow = 0, fast = ans.size() - 1;
+
+        while(slow < fast){
+            
+            int sum = ans[slow] + ans[fast];
+
+            if(sum == k){
+                return true;
+            }
+
+            if(sum > k){
+                fast--;
+            }
+
+            if(sum < k){
+                slow++;
+            }
+        }
+
+        return false;
+
+    }
+};
+
+----------------
+
+		(using next and before iterator)
+
+class Solution {
+public:
+
+    stack<TreeNode*> s, t;
+
+    void push_all_left(TreeNode* root){
+        while(root != NULL){
+            s.push(root);
+            root = root -> left;
+        }
+    }
+
+    void push_all_right(TreeNode* root){
+        while(root != NULL){
+            t.push(root);
+            root = root -> right;
+        }
+    }
+
+    void next(){
+
+        TreeNode* ans = s.top();
+        s.pop();
+        push_all_left(ans -> right);
+
+    }
+
+    void before(){
+
+        TreeNode* ans = t.top();
+        t.pop();
+        push_all_right(ans -> left);
+
+    }
+
+    bool findTarget(TreeNode* root, int k) {
+        
+        push_all_left(root);
+
+        push_all_right(root);
+
+        while(!s.empty() && !t.empty()){
+
+            int a = s.top() -> val, b = t.top() -> val;
+            
+            if(a == b){
+                break;
+            }
+
+            if(a + b == k){
+                return true;
+            }
+
+            if(a + b < k){
+                next();
+            }
+
+            if(a + b > k){
+                before();
+            }
+
+        }
+
+        return false;
+    }
+};
+
+time O(N) and O(H) * 2 space.
 
 
 
