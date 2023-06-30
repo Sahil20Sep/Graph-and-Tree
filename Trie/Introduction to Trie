@@ -694,3 +694,160 @@ public:
 
 time --> O(Q * 32 + N * 32);
 
+-----------------------------------------------------------------------------------------------------------
+
+            (codeforces insert, remove, maxi xor)
+
+struct Node{
+ 
+    Node* links[2];
+ 
+    ll cnt = 0;
+ 
+    bool containKey(ll bit){
+ 
+        return links[bit] != NULL;
+ 
+    }
+ 
+    void put(ll bit, Node* node){
+ 
+        links[bit] = node;
+ 
+    }
+ 
+    Node* get(ll bit){
+ 
+        return links[bit];
+    }
+ 
+};
+ 
+class Trie{
+ 
+    public:
+ 
+    Node* root;
+ 
+    Trie(){
+ 
+        root = new Node();
+ 
+    }
+ 
+    void insert(ll num){
+ 
+        Node* node = root;
+ 
+        for(ll i = 31; i >= 0; i--){
+ 
+            ll bit = (num >> i) & 1;
+ 
+            if(!node -> containKey(bit)){
+ 
+                node -> put(bit, new Node());
+ 
+            }
+ 
+            node = node -> get(bit);
+ 
+            node -> cnt += 1;
+ 
+        }
+    }
+ 
+    void remove(ll num){
+ 
+        Node* node = root;
+ 
+        for(ll i = 31; i >= 0; i--){
+ 
+            ll bit = (num >> i) & 1;
+ 
+            node = node -> get(bit);
+ 
+            node -> cnt -= 1;
+ 
+        }
+ 
+    }
+ 
+    ll getMax(ll num){
+ 
+        Node* node = root;
+ 
+        ll ans = 0;
+ 
+        for(ll i = 31; i >= 0; i--){
+ 
+            ll bit = (num >> i) & 1;
+ 
+            if(node -> containKey(!bit)){
+ 
+                Node* temp = node -> get(!bit);
+ 
+                if(temp -> cnt > 0){
+ 
+                    ans += (1 << i);
+ 
+                    node = node -> get(!bit);
+ 
+                }else{
+ 
+                    node = node -> get(bit);
+ 
+                }
+ 
+            }else{
+ 
+                node = node -> get(bit);
+ 
+            }
+        }
+ 
+        return ans;
+ 
+    }
+};
+ 
+//------------------------------------code------------------------------------//
+ 
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    ll T = 1;
+    // cin >> T;
+    while(T--){
+ 
+        ll n; cin >> n;
+ 
+        Trie obj;
+ 
+        obj.insert(0LL);
+ 
+        while(n--){
+ 
+            char x; cin >> x;
+ 
+            ll a; cin >> a;
+ 
+            if(x == '+'){
+ 
+                obj.insert(a);
+ 
+            }else if(x == '-'){
+ 
+                obj.remove(a);
+ 
+            }else{
+ 
+                cout << obj.getMax(a) << endl;
+ 
+            }
+ 
+        }
+        sahil:; 
+    }
+    return 0;
+}
+
