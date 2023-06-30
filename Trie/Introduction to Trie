@@ -557,3 +557,138 @@ int maxXOR(int n, int m, vector<int> &arr1, vector<int> &arr2)
 
 }
 
+-----------------------------------------------------------------------------------
+
+            (offline queries) maxi xor with some condition
+
+struct Node{
+
+    Node* links[2];
+
+    bool containKey(int bit){
+
+        return links[bit] != NULL;
+    }
+
+    void put(int bit, Node* node){
+
+        links[bit] = node;
+    }
+
+    Node* get(int bit){
+
+        return links[bit];
+    }
+};
+
+class Trie{
+
+    public:
+
+    Node* root;
+
+    Trie(){
+
+        root = new Node();
+
+    }
+
+    void insert(int num){
+
+        Node* node = root;
+
+        for(int i = 31; i >= 0; i--){
+
+            int bit = (num >> i) & 1;
+
+            if(!node -> containKey(bit)){
+
+                node -> put(bit, new Node());
+                
+            }
+
+            node = node -> get(bit);
+
+        }
+    }
+
+    int getMax(int num){
+
+        Node* node = root;
+
+        int maxi = 0;
+
+        for(int i = 31; i >= 0; i--){
+
+            int bit = (num >> i) & 1;
+
+            if(node -> containKey(!bit)){
+
+                maxi += (1 << i);
+
+                node = node -> get(!bit);
+
+            }else{
+
+                node = node -> get(bit);
+
+            }
+        }
+
+        return maxi;
+    }
+};
+
+class Solution {
+public:
+    vector<int> maximizeXor(vector<int>& nums, vector<vector<int>>& q) {
+        
+        Trie obj;
+
+        int n = nums.size();
+
+        vector<pair<int, pair<int, int>>> store;
+
+        int cnt = 0;
+
+        for(auto it : q){
+
+            int x = it[0], m = it[1];
+
+            store.push_back({m, {x, cnt++}});
+
+        }
+
+        sort(nums.begin(), nums.end());
+
+        sort(store.begin(), store.end());
+
+        int prev = 0;
+
+        vector<int> ans(q.size(), -1);
+
+        for(auto it : store){
+
+            int m = it.first, x = it.second.first, i = it.second.second;
+
+            while(prev < n && nums[prev] <= m){
+
+                obj.insert(nums[prev]);
+
+                prev++;
+
+            }
+
+            if(prev){
+
+                ans[i] = obj.getMax(x);
+
+            }
+
+        }
+
+        return ans;
+
+    }
+};
+
