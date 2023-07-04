@@ -62,3 +62,62 @@ int main(){
     }
     return 0;
 }
+
+
+----------------------------------------------------------------------------------------------------------=-------------------
+
+int dfs(ll vertex, ll target, vector<vector<ll>> &graph, vector<ll> &dp){
+
+    if(vertex == target){
+
+        return dp[vertex] = 1;
+
+    }
+
+    if(dp[vertex] != -1){
+
+        return dp[vertex];
+
+    }
+
+    ll ans = 0;
+
+    for(auto child : graph[vertex]){
+
+        ans = (ans + dfs(child, target, graph, dp)) % mod; 
+
+    }
+
+    return dp[vertex] = ans;
+
+}
+ 
+//------------------------------------code------------------------------------//
+ 
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    ll T = 1;
+    // cin >> T;
+    while(T--){
+
+        ll n, m; cin >> n >> m;
+
+        vector<vector<ll>> graph(n + 1);
+
+        for(ll i = 0; i < m ; i++){
+            ll u, v; cin >> u >> v;
+
+            // cout << u << " " << v << endl;
+
+            graph[u].push_back(v);
+        }
+
+        vector<ll> dp(n + 1, -1);
+
+        cout << dfs(1, n, graph, dp) << endl;
+
+        sahil:; 
+    }
+    return 0;
+}
