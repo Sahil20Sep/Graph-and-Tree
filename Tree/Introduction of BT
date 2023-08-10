@@ -24,6 +24,9 @@ bool isFullTree (struct Node* root)
     return false;
 }
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 complete binary tree --> all level are completyly filled except the last level and in last level all node as left side as possible
 
 Properties of Complete Binary Tree:
@@ -98,7 +101,7 @@ bool isCompleteBT(node* root)
     return true;
 }
 
---------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 perfect binary tree --> all leaf node has to be in same level --> total number of node in binary tree is 2 ^ h - 1.
 
@@ -146,7 +149,11 @@ bool isPerfectBinaryTree(Node* root)
     return flag;
 }
 
+-------------------------------------------------------------------------------
+
 degenerate tree --> every node have signle children || starigh line
+
+-----------------------------------------------------------------------------
 
 struct node
 {
@@ -165,6 +172,9 @@ root -> left = new node(2);
 root -> right = new node(3);
 root -> left -> right = new node(5);
 
+-----------------------------------------------------------------------------
+
+
 (DFS)
 
 inorder --> left root right
@@ -179,9 +189,15 @@ postorder --> left right root
 
 inorder --> 4 2 5 1 6 3 7
 
+In the case of binary search trees (BST), Inorder traversal gives nodes in non-decreasing order. To get nodes of BST in non-increasing order, a variation of Inorder traversal where Inorder traversal is reversed can be used.
+
 preorder --> 1 2 4 5 3 6 7
 
+Preorder traversal is used to create a copy of the tree. Preorder traversal is also used to get prefix expressions on an expression tree.
+
 postorder --> 4 5 2 6 7 3 1
+
+Postorder traversal is used to delete the tree. Please see the question for the deletion of a tree for details. Postorder traversal is also useful to get the postfix expression of an expression tree
 
 (BFS)
 
