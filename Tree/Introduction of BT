@@ -1,10 +1,150 @@
 ancestors --> parent, grandparent, ettc..
 
 full binary tree -- > all node have 0 or 2 children
+no. of leaf node = 1 + no. of internal Node
+
+---------check whether full binary tree or not--------------
+
+bool isFullTree (struct Node* root)
+{
+    // If empty tree
+    if (root == NULL)
+        return true;
+  
+    // If leaf node
+    if (root->left == NULL && root->right == NULL)
+        return true;
+  
+    // If both left and right are not NULL, and left & right subtrees
+    // are full
+    if ((root->left) && (root->right))
+        return (isFullTree(root->left) && isFullTree(root->right));
+  
+    // We reach here when none of the above if conditions work
+    return false;
+}
 
 complete binary tree --> all level are completyly filled except the last level and in last level all node as left side as possible
 
-perfect binary tree --> all leaf node has to be in same level
+Properties of Complete Binary Tree:
+A complete binary tree is said to be a proper binary tree where all leaves have the same depth.
+In a complete binary tree number of nodes at depth d is 2d. 
+In a  complete binary tree with n nodes height of the tree is log(n+1).
+All the levels except the last level are completely full.
+
+-------------------------
+
+TreeNode* buildTree(vector<int>& nums) {
+    if (nums.empty()) {
+        return NULL;
+    }
+    TreeNode* root = new TreeNode(nums[0]);
+    queue<TreeNode*> q;
+    q.push(root);
+    int i = 1;
+    while (i < nums.size()) {
+        TreeNode* curr = q.front();
+        q.pop();
+        if (i < nums.size()) {
+            curr->left = new TreeNode(nums[i++]);
+            q.push(curr->left);
+        }
+        if (i < nums.size()) {
+            curr->right = new TreeNode(nums[i++]);
+            q.push(curr->right);
+        }
+    }
+    return root;
+}
+
+-------------------count the node in any binary tree
+
+unsigned int countNodes(Node* root)
+{
+    if (root == NULL)
+        return (0);
+    return (1 + countNodes(root->left) +
+            countNodes(root->right));
+}
+
+-------------------------check wherthher it is complete binary tree or not
+
+bool isCompleteBT(node* root)
+
+    queue<node*> q;
+    q.push(root);
+    bool flag = false;
+     while (!q.empty()) {
+        node* temp = q.front();
+        q.pop();
+ 
+        if (temp->left) {
+            if (flag == true)
+                return false;
+ 
+            q.push(temp->left); // Enqueue Left Child
+        else
+            flag = true;
+ 
+        if (temp->right) {
+            if (flag == true)
+                return false;
+ 
+            q.push(temp->right); // Enqueue Right Child
+        }
+        else
+            flag = true;
+    }
+    return true;
+}
+
+--------------------------------------
+
+perfect binary tree --> all leaf node has to be in same level --> total number of node in binary tree is 2 ^ h - 1.
+
+--------------checking
+
+bool isPerfectBinaryTree(Node* root)
+{
+    if (root == nullptr) {
+        return true;
+    }
+ 
+    queue<Node*> q;
+    q.push(root);
+ 
+    int level = 1; // Current level of the tree
+    int flag
+        = 1; // Flag to track if the tree is perfect or not
+ 
+    while (!q.empty()) {
+        int size = q.size();
+        vector<int> levelValues;
+ 
+        // Traverse all nodes at the current level
+        for (int i = 0; i < size; i++) {
+            Node* temp = q.front();
+            q.pop();
+ 
+            levelValues.push_back(temp->data);
+ 
+            // Enqueue the left and right children of the
+            // current node
+            if (temp->left) {
+                q.push(temp->left);
+            }
+            if (temp->right) {
+                q.push(temp->right);
+            }
+        }
+        if (levelValues.size() != 0
+            && levelValues.size() != level) {
+            flag = 0; // Tree is not perfect
+        }
+        level = level * 2;
+    }
+    return flag;
+}
 
 degenerate tree --> every node have signle children || starigh line
 
